@@ -29,6 +29,7 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 import javax.swing.filechooser.FileFilter;
 
+
 import javazoom.jl.decoder.JavaLayerException;
 import javazoom.jl.player.Player;
 
@@ -78,7 +79,7 @@ public class ChessDraw extends JFrame{
 	public ChessDraw() {
 		// TODO Auto-generated constructor stub
 		raw=BackData(data);
-		Board panel=new Board();
+		final Board panel=new Board();
 		add(panel,BorderLayout.CENTER);
 		JPanel panel2=new JPanel();
 		panel2.add(advanced);
@@ -225,7 +226,7 @@ public class ChessDraw extends JFrame{
 					repaint();
 					return;
 				}
-				List<int[][]> dataReturn=open();
+				final List<int[][]> dataReturn=open();
 				timer=new Timer(1000, new ActionListener() {
 					
 					@Override
