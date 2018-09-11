@@ -129,7 +129,6 @@ public class ReWrite {
 		 };
 		 
 		 int[][] pao={
-		        		
 		        		{100, 100,  96, 91,  90, 91,  96, 100, 100},
 		        		{98,  98,  96, 92,  89, 92,  96,  98,  98},
 		        		{97,  97,  96, 91,  92, 91,  96,  97,  97},
@@ -614,8 +613,8 @@ public class ReWrite {
 	//产生所有走法的函数
 	public List<List<Integer>> AllMove(int[][] data,boolean isAI) {
 		List<List<Integer>> total=new ArrayList<>();
-		total.add(new ArrayList<>());
-		total.add(new ArrayList<>());
+		total.add(new ArrayList<Integer>());
+		total.add(new ArrayList<Integer>());
 		for(int i=0;i<rows;i++){
 			for(int j=0;j<cols;j++){
 				if(isAI){
@@ -930,7 +929,7 @@ private List<List<Integer>> canMove(int[][] data,int i,int j,int label) {
 					listx.add(i);
 					listy.add(j);
 					listx.add(i-2);
-					listy.add(j-1);//不同子
+					listy.add(j-1);// 不同子
 				}
 			}
 		}
