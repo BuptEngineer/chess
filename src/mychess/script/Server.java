@@ -5,7 +5,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.JOptionPane;
+import mychess.function.Redo;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -14,10 +14,10 @@ import java.io.IOException;
 public class Server {
 	private List<Socket> clients;
 	private static int[][] data;
-	
 	public Server() {
 		// TODO Auto-generated constructor stub
 		init();
+		new Redo();
 		ServerSocket socket;
 		clients=new ArrayList<Socket>();//已经连接的客户端
 		try{
@@ -76,16 +76,35 @@ public class Server {
 					outputStreamToOtherClients.writeUTF("role=observer");
 					outputStreamToOtherClients.writeUTF(Array_to_String(data));
 				}
+				
 				while(true){
 					//交互
 					//这会引发异常
 					String message=inputStreamFromClient.readUTF();//
-					//修改本地data
-					String[] fields=message.split(" ");
-					int prerow=Integer.parseInt(fields[0]),precol=Integer.parseInt(fields[1]),
-							row=Integer.parseInt(fields[2]),col=Integer.parseInt(fields[3]);
-					data[row-1][col-1]=data[prerow-1][precol-1];
-					data[prerow-1][precol-1]=0;//同步?
+					
+					if(message.equals("Congratulate,you win.")){
+						//游戏结束
+						for(Socket s:clients){
+							outputStreamToOtherClients=new DataOutputStream(s.getOutputStream());
+							if(s==current_socket) outputStreamToOtherClients.writeUTF("Congratulate,you win.");
+							else outputStreamToOtherClients.writeUTF("Sorry,you lose.");
+							outputStreamToOtherClients.flush();
+						}
+						continue;
+					}
+					
+					
+					if(message.indexOf("\n")>=0){
+						//传data
+						data=String_to_Array(message);
+					}else{
+						//修改本地data
+						String[] fields=message.split(" ");
+						int prerow=Integer.parseInt(fields[0]),precol=Integer.parseInt(fields[1]),
+								row=Integer.parseInt(fields[2]),col=Integer.parseInt(fields[3]);
+						data[row-1][col-1]=data[prerow-1][precol-1];
+						data[prerow-1][precol-1]=0;//同步?
+					}
 					for(Socket s:clients){
 						//向其他所有连接的客户端广播
 						outputStreamToOtherClients=new DataOutputStream(s.getOutputStream());
@@ -96,7 +115,7 @@ public class Server {
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				//有参与人关闭了连接
-				JOptionPane.showMessageDialog(null, "有客户端退出连接，服务器将重置...");
+				//JOptionPane.showMessageDialog(null, "有客户端退出连接，服务器将重置...");
 				clients.clear();
 				init();
 				return;

@@ -60,5 +60,4 @@ public class Internet{
 		}
 		return message;
 	}
-
 }

@@ -6,11 +6,16 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import mychess.function.Commication;
 import mychess.function.Internet;
 import mychess.function.Redo;
+import mychess.function.Replay;
 import mychess.util.Common;
 import mychess.util.HasFinished;
 import mychess.util.JudgeMove;
@@ -25,7 +30,6 @@ public class ChessBoard extends JPanel implements MouseListener,Runnable{
 	private boolean isSelected;
 	private int precol;
 	private int prerow;
-	private boolean preIsRed;
 	private boolean yourTurn;
 	private int[][] data;
 	private Image[] pics;
@@ -33,6 +37,9 @@ public class ChessBoard extends JPanel implements MouseListener,Runnable{
 	private Internet internet;
 	private boolean observer;
 	private boolean isRed;//是否是红方
+	private boolean isRedo;//是否悔棋
+	private Commication cc;//消息服务
+	private byte state=0;//状态0表示空闲, 1表示准备,2表示游戏开始,3表示游戏进行中,4表示游戏结束
 	
 	public ChessBoard(Image[] pics,Redo rd) {
 		// TODO Auto-generated constructor stub
@@ -43,16 +50,21 @@ public class ChessBoard extends JPanel implements MouseListener,Runnable{
 		String message=internet.readMessage();
 		String message_array=internet.readMessage();
 		data=Common.String_to_Array(message_array);
+		rd.add_one_step(data);
 		if(message.endsWith("true")){
 			isRed=true;
+			state=1;
 			yourTurn=true;
 		}
-		else if(message.endsWith("false")) yourTurn=false;
+		else if(message.endsWith("false")) state=2;
 		else observer=true;
 		
 		addMouseListener(this);
-		Thread t=new Thread(this);
+		Thread t=new Thread(this);//数据服务
 		t.start();
+		cc=new Commication(this);
+		Thread t2=new Thread(cc);//消息服务
+		t2.start();
 	}
 	
 	private void drawLines(int row,int col,int width,int height,Graphics g) {
@@ -139,7 +151,7 @@ public class ChessBoard extends JPanel implements MouseListener,Runnable{
 			}
 		}
 		
-		if(yourTurn){
+		if(yourTurn && !isRedo && state==3){
 			//画对方的提示
 			g.setColor(Color.GREEN);
 			g.drawLine(precol*width/11-width/22, prerow*height/12-height/24, precol*width/11-width/44, prerow*height/12-height/24);
@@ -181,8 +193,7 @@ public class ChessBoard extends JPanel implements MouseListener,Runnable{
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		// TODO Auto-generated method stub
-		if(!yourTurn || observer) return;
-		
+		if(!yourTurn || observer || state==4) return;
 		//确定位置
 		int width=getWidth();
 		int height=getHeight();
@@ -277,24 +288,35 @@ public class ChessBoard extends JPanel implements MouseListener,Runnable{
 					break;
 			}
 			
-			rd.add_one_step(aixs);//将当前步加入列表中
+			
 			//在此处验证是否被将军
 			int[][] datasub=Common.Backup(data);
 			datasub[row-1][col-1]=datasub[prerow-1][precol-1];
 			datasub[prerow-1][precol-1]=0;
-			if(!HasFinished.jiangTip(datasub, isRed)){
-				prerow=11-prerow;//恢复，解决被将军后移动其他子问题
-				return;
-			}//当前步不能走
-			internet.writeMessage(prerow+" "+precol+" "+row+" "+col);//向服务器写消息
-			isSelected=false;
-			if(new HasFinished(data).isFinished(isRed)){
-				if(!yourTurn)
-					JOptionPane.showMessageDialog(null, "Sorry, you lose.");
-				else
-					JOptionPane.showMessageDialog(null, "Ok, you win.");
+			if(new HasFinished(datasub).isFinished(isRed)){
+				data=datasub;
+				tip=false;
+				isRedo=true;
+				repaint();
+				internet.writeMessage("Congratulate,you win.");
+				//写入
+				rd.add_one_step(Common.Backup(datasub));
+				SimpleDateFormat sf=new SimpleDateFormat("YYYYMMDD_HHmmss");
+				Replay.WriteFile(rd.getMove_down(), "file/"+sf.format(new Date())+".chess");
+				state=4;
 				return;
 			}
+			
+			if(!HasFinished.jiangTip(datasub, isRed)){
+				if(!isRed)
+					prerow=11-prerow;//恢复，解决被将军后移动其他子问题
+				isSelected=true;
+				return;
+			}//当前步不能走
+//			rd.add_one_step(Common.Backup(data));//将当前步加入列表中
+			internet.writeMessage(prerow+" "+precol+" "+row+" "+col);//向服务器写消息
+			isSelected=false;
+			isRedo=false;
 		}else{//选子阶段
 			precol=col;
 			prerow=row;
@@ -335,14 +357,6 @@ public class ChessBoard extends JPanel implements MouseListener,Runnable{
 		this.isSelected = isSelected;
 	}
 
-	public boolean isPreIsRed() {
-		return preIsRed;
-	}
-
-	public void setPreIsRed(boolean preIsRed) {
-		this.preIsRed = preIsRed;
-	}
-
 	public boolean isYourTurn() {
 		return yourTurn;
 	}
@@ -363,11 +377,33 @@ public class ChessBoard extends JPanel implements MouseListener,Runnable{
 		return internet;
 	}
 
+	public Redo getRd() {
+		return rd;
+	}
+
+	public void setRedo(boolean isRedo) {
+		this.isRedo = isRedo;
+	}
+
+	public Commication getCc() {
+		return cc;
+	}
+	
+	public ChessBoard Refresh() {
+		return new ChessBoard(pics, rd);
+	}
+
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
 		while(true){
 			String message_array=internet.readMessage();
+			state=3;//游戏中
+			if(message_array.indexOf(",")>0){
+				//结束消息
+				JOptionPane.showMessageDialog(null, message_array);
+				continue;
+			}
 		    int[][]	datasub=Common.String_to_Array(message_array);
 		    int[] aixs=Common.FindDiff(data, datasub,isRed);
 		    prerow=aixs[0];
@@ -377,8 +413,8 @@ public class ChessBoard extends JPanel implements MouseListener,Runnable{
 		    if(!isRed)
 		    	row=11-row;
 		    col=aixs[3];
-		    rd.add_one_step(aixs);
 		    data=datasub;
+		    rd.add_one_step(Common.Backup(data));
 			tip=false;
 			repaint();
 			yourTurn=!yourTurn;

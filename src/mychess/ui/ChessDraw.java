@@ -6,33 +6,40 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
+
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.Timer;
+
 import mychess.function.Redo;
+import mychess.function.Replay;
 
 
 //该类实现象棋的图形界面,并负责通信
 public class ChessDraw extends JFrame{
 
 	private static final long serialVersionUID = 1L;
-	private JButton twoplayers=new JButton("切换对弈模式");
-	private JButton internet=new JButton("播放录像");
+	private JButton restart=new JButton("重新开始");
+	private JButton video=new JButton("播放录像");
 	private JButton cancel=new JButton("悔棋");
 	private Redo rd=new Redo();
 	private Image[] pics =new Image[15];
+	private Timer timer;//动画
+	private int num=0;//播放起始位置
 
 	public ChessDraw() {
 		ChessBoard panel=new ChessBoard(pics,rd);
 		add(panel,BorderLayout.CENTER);
 		JPanel panel2=new JPanel();
-		panel2.add(twoplayers);
+		panel2.add(restart);
 		panel2.add(cancel);
-		panel2.add(internet);
+		panel2.add(video);
 		add(panel2,BorderLayout.SOUTH);
-		twoplayers.setBackground(new Color(216,196,152));
-		internet.setBackground(new Color(216,196,152));
+		restart.setBackground(new Color(216,196,152));
+		video.setBackground(new Color(216,196,152));
 		cancel.setBackground(new Color(216,196,152));
 		panel2.setBackground(new Color(216,196,152));
 		panel.setBackground(new Color(216,196,152));
@@ -51,7 +58,7 @@ public class ChessDraw extends JFrame{
 		pics[13]=Toolkit.getDefaultToolkit().getImage("images/炮2.png");
 		pics[14]=Toolkit.getDefaultToolkit().getImage("images/卒.png");
 		
-		twoplayers.addActionListener(new ActionListener() {
+		restart.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
@@ -69,14 +76,39 @@ public class ChessDraw extends JFrame{
 					JOptionPane.showMessageDialog(null, "初始局面,无法撤销");
 					return;
 				}
+				if(panel.isYourTurn()){
+					JOptionPane.showMessageDialog(null, "到你走棋了，无法撤销");
+					return;
+				}else{
+					panel.getCc().PostMessage("Redo");
+				}
 			}
 		});
-		
-		internet.addActionListener(new ActionListener() {
+
+		video.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				//
+				String filepath=Replay.Open_Get_Filepath();
+				List<int[][]> list=Replay.ReadFile(filepath);
+				//播放动画
+				timer=new Timer(1000, new ActionListener() {
+					
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						// TODO Auto-generated method stub
+						System.out.println(list.size());
+						int[][] datasub=list.get(num++);
+						panel.setData(datasub);
+						repaint();
+						if(num >= list.size()){ 
+							timer.stop();
+							JOptionPane.showMessageDialog(null, "Over");
+						}
+					}
+				});
+				timer.start();
 			}
 		});
 	}

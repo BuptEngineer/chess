@@ -23,8 +23,19 @@ public class Common {
 		return datasub;
 	}
 	
+	public static String Array_to_String(int[][] data) {
+		String temp="";
+		for(int i=0;i<data.length;i++){
+			for(int j=0;j<data[i].length;j++){
+				temp+=data[i][j]+" ";
+			}
+			temp+="\n";
+		}
+		return temp;
+	}
+	
 	public static int[] FindDiff(int[][] data1,int[][] data2,boolean isRed) {//¿ÉÓÅ»¯
-		int[] aixs=new int[4];
+		int[] aixs=new int[5];
 		for(int i=0;i<data1.length;i++)
 			for(int j=0;j<data1[i].length;j++)
 				if(data1[i][j]!=data2[i][j])
@@ -35,11 +46,6 @@ public class Common {
 						aixs[2]=i+1;
 						aixs[3]=j+1;
 					}
-//		if(isRed){
-//			//Ó³Éä
-//			aixs[0]=11-aixs[0];
-//			aixs[2]=11-aixs[2];
-//		}
 		return aixs;
 	}
 }

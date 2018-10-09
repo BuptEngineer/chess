@@ -15,6 +15,13 @@ public class HasFinished {
 	}
 	
 	public boolean isFinished(boolean isRed) {
+		//将军被吃
+		if(isRed && !Shuai_exists(data)){
+			return true;
+		}else if(!isRed && !Jiang_exists(data)){
+			return true;
+		}
+		//无棋可走
 		List<List<int[]>> all=all_move(isRed);
 		for(int i=0;i<all.size();i++){
 			for(int j=0;j<all.get(i).size();j++){
@@ -36,8 +43,8 @@ public class HasFinished {
 		int[][] datasub = Common.Backup(data);
 		for (int i = 0; i < datasub.length; i++) {
 			for (int j = 0; j < datasub[i].length; j++) {
-				if ((isRed && datasub[i][j] > 7) ||
-						(!isRed && datasub[i][j]<=7))
+				if ((!isRed && datasub[i][j] > 7) ||
+						(isRed && datasub[i][j]<=7))
 					continue;// 该子不是自己的
 				switch (datasub[i][j]) {
 					case 1:// 车
@@ -446,5 +453,22 @@ public class HasFinished {
 			return false;
 		}
 		return true;
+	}
+	
+	
+	private boolean Shuai_exists(int[][] data) {
+		for(int i=7;i<=9;i++)
+			for(int j=3;j<=5;j++)
+				if(data[i][j]==5)
+					return true;
+		return false;
+	}
+	
+	private boolean Jiang_exists(int[][] data) {
+		for(int i=0;i<=2;i++)
+			for(int j=3;j<=5;j++)
+				if(data[i][j]==12)
+					return true;
+		return false;
 	}
 }
