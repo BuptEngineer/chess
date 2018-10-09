@@ -11,10 +11,9 @@ import javax.swing.JPanel;
 
 import mychess.function.Internet;
 import mychess.function.Redo;
-import mychess.util.BackData;
+import mychess.util.Common;
 import mychess.util.HasFinished;
 import mychess.util.JudgeMove;
-import sub.Server;
 
 
 public class ChessBoard extends JPanel implements MouseListener,Runnable{
@@ -35,14 +34,15 @@ public class ChessBoard extends JPanel implements MouseListener,Runnable{
 	private boolean observer;
 	private boolean isRed;//是否是红方
 	
-	public ChessBoard(int[][] data,Image[] pics,Redo rd) {
+	public ChessBoard(Image[] pics,Redo rd) {
 		// TODO Auto-generated constructor stub
-		this.data=data;
 		this.pics=pics;
 		this.rd=rd;
 		internet=new Internet();
 		//判断角色
 		String message=internet.readMessage();
+		String message_array=internet.readMessage();
+		data=Common.String_to_Array(message_array);
 		if(message.endsWith("true")){
 			isRed=true;
 			yourTurn=true;
@@ -126,19 +126,42 @@ public class ChessBoard extends JPanel implements MouseListener,Runnable{
 		drawLines(7, 9, width, height, g);//兵
 		
 		//画图像
-			for(int i=1;i<=10;i++){
-				for(int j=1;j<=9;j++){
-					if(data[i-1][j-1]==0) continue;
-					int baseX=width*j/11;
-					int baseY;
-					if(!isRed)
-						baseY=height*(11-i)/12;
-					else
-						baseY=height*i/12;
-					g.drawImage(pics[data[i-1][j-1]], baseX-width/22, baseY-height/24, width/11, height/12, this);
-				}
+		for(int i=1;i<=10;i++){
+			for(int j=1;j<=9;j++){
+				if(data[i-1][j-1]==0) continue;
+				int baseX=width*j/11;
+				int baseY;
+				if(!isRed)
+					baseY=height*(11-i)/12;
+				else
+					baseY=height*i/12;
+				g.drawImage(pics[data[i-1][j-1]], baseX-width/22, baseY-height/24, width/11, height/12, this);
 			}
+		}
 		
+		if(yourTurn){
+			//画对方的提示
+			g.setColor(Color.GREEN);
+			g.drawLine(precol*width/11-width/22, prerow*height/12-height/24, precol*width/11-width/44, prerow*height/12-height/24);
+			g.drawLine(precol*width/11-width/22, prerow*height/12-height/24, precol*width/11-width/22, prerow*height/12-height/48);
+			g.drawLine(precol*width/11+width/22, prerow*height/12-height/24, precol*width/11+width/44, prerow*height/12-height/24);
+			g.drawLine(precol*width/11+width/22, prerow*height/12-height/24, precol*width/11+width/22, prerow*height/12-height/48);
+			g.drawLine(precol*width/11+width/22, prerow*height/12+height/24, precol*width/11+width/44, prerow*height/12+height/24);
+			g.drawLine(precol*width/11+width/22, prerow*height/12+height/24, precol*width/11+width/22, prerow*height/12+height/48);
+			g.drawLine(precol*width/11-width/22, prerow*height/12+height/24, precol*width/11-width/44, prerow*height/12+height/24);
+			g.drawLine(precol*width/11-width/22, prerow*height/12+height/24, precol*width/11-width/22, prerow*height/12+height/48);
+			g.setColor(Color.black);
+			g.setColor(Color.BLUE);
+			g.drawLine(col*width/11-width/22, row*height/12-height/24, col*width/11-width/44, row*height/12-height/24);
+			g.drawLine(col*width/11-width/22, row*height/12-height/24, col*width/11-width/22, row*height/12-height/48);
+			g.drawLine(col*width/11+width/22, row*height/12-height/24, col*width/11+width/44, row*height/12-height/24);
+			g.drawLine(col*width/11+width/22, row*height/12-height/24, col*width/11+width/22, row*height/12-height/48);
+			g.drawLine(col*width/11+width/22, row*height/12+height/24, col*width/11+width/44, row*height/12+height/24);
+			g.drawLine(col*width/11+width/22, row*height/12+height/24, col*width/11+width/22, row*height/12+height/48);
+			g.drawLine(col*width/11-width/22, row*height/12+height/24, col*width/11-width/44, row*height/12+height/24);
+			g.drawLine(col*width/11-width/22, row*height/12+height/24, col*width/11-width/22, row*height/12+height/48);
+			g.setColor(Color.black);
+		}
 		//画一个提示
 		if(tip){
 			g.setColor(Color.green);
@@ -256,7 +279,7 @@ public class ChessBoard extends JPanel implements MouseListener,Runnable{
 			
 			rd.add_one_step(aixs);//将当前步加入列表中
 			//在此处验证是否被将军
-			int[][] datasub=BackData.Backup(data);
+			int[][] datasub=Common.Backup(data);
 			datasub[row-1][col-1]=datasub[prerow-1][precol-1];
 			datasub[prerow-1][precol-1]=0;
 			if(!HasFinished.jiangTip(datasub, isRed)){
@@ -344,8 +367,18 @@ public class ChessBoard extends JPanel implements MouseListener,Runnable{
 	public void run() {
 		// TODO Auto-generated method stub
 		while(true){
-			String message=internet.readMessage();
-			data=Server.String_to_Array(message);
+			String message_array=internet.readMessage();
+		    int[][]	datasub=Common.String_to_Array(message_array);
+		    int[] aixs=Common.FindDiff(data, datasub,isRed);
+		    prerow=aixs[0];
+		    if(!isRed) prerow=11-prerow;
+		    precol=aixs[1];
+		    row=aixs[2];
+		    if(!isRed)
+		    	row=11-row;
+		    col=aixs[3];
+		    rd.add_one_step(aixs);
+		    data=datasub;
 			tip=false;
 			repaint();
 			yourTurn=!yourTurn;

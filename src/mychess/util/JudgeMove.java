@@ -9,7 +9,7 @@ public class JudgeMove {
 	public JudgeMove(ChessBoard cb,int[][] data,boolean isRed) {
 		// TODO Auto-generated constructor stub
 		this.cb=cb;
-		this.data=BackData.Backup(data);
+		this.data=Common.Backup(data);
 		this.isRed=isRed;
 	}
 	public boolean move_che(int[] aixs) {

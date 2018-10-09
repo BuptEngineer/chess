@@ -1,4 +1,4 @@
-package sub;
+package mychess.script;
 
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -68,10 +68,13 @@ public class Server {
 				if(clients.size()==1){
 					//第一个用户执红
 					outputStreamToOtherClients.writeUTF("yourTurn=true");
+					outputStreamToOtherClients.writeUTF(Array_to_String(data));
 				}else if(clients.size()==2){
 					outputStreamToOtherClients.writeUTF("yourTurn=false");
+					outputStreamToOtherClients.writeUTF(Array_to_String(data));
 				}else{
 					outputStreamToOtherClients.writeUTF("role=observer");
+					outputStreamToOtherClients.writeUTF(Array_to_String(data));
 				}
 				while(true){
 					//交互
@@ -108,6 +111,7 @@ public class Server {
 			}
 		}
 	}
+
 	
 	public static String Array_to_String(int[][] data) {
 		String temp="";
@@ -131,7 +135,6 @@ public class Server {
 		}
 		return datasub;
 	}
-	
 	public static void main(String[] args) {
 		new Server();
 	}

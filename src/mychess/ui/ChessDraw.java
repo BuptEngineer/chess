@@ -6,15 +6,11 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import mychess.function.Redo;
-import mychess.util.BackData;
 
 
 //该类实现象棋的图形界面,并负责通信
@@ -25,24 +21,10 @@ public class ChessDraw extends JFrame{
 	private JButton internet=new JButton("播放录像");
 	private JButton cancel=new JButton("悔棋");
 	private Redo rd=new Redo();
-	private List<int[][]> back=new ArrayList<>();
 	private Image[] pics =new Image[15];
-	
-	private int[][] data={{8,9,10,11,12,11,10,9,8},
-			{0,0,0,0,0,0,0,0,0},
-			{0,13,0,0,0,0,0,13,0},
-			{14,0,14,0,14,0,14,0,14},
-			{0,0,0,0,0,0,0,0,0},
-			{0,0,0,0,0,0,0,0,0},
-			{7,0,7,0,7,0,7,0,7},
-			{0,6,0,0,0,0,0,6,0},
-			{0,0,0,0,0,0,0,0,0},
-			{1,2,3,4,5,4,3,2,1}
-	};
 
 	public ChessDraw() {
-		BackData.Backup(data);
-		ChessBoard panel=new ChessBoard(data,pics,rd);
+		ChessBoard panel=new ChessBoard(pics,rd);
 		add(panel,BorderLayout.CENTER);
 		JPanel panel2=new JPanel();
 		panel2.add(twoplayers);
@@ -68,27 +50,12 @@ public class ChessDraw extends JFrame{
 		pics[12]=Toolkit.getDefaultToolkit().getImage("images/将.png");
 		pics[13]=Toolkit.getDefaultToolkit().getImage("images/炮2.png");
 		pics[14]=Toolkit.getDefaultToolkit().getImage("images/卒.png");
-		back.add(BackData.Backup(data));
 		
 		twoplayers.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				for(int i=0;i<back.size()-1;i++)
-					back.remove(back.size()-1);
-				//TODO
-				data=new int[][]{{8,9,10,11,12,11,10,9,8},
-						{0,0,0,0,0,0,0,0,0},
-						{0,13,0,0,0,0,0,13,0},
-						{14,0,14,0,14,0,14,0,14},
-						{0,0,0,0,0,0,0,0,0},
-						{0,0,0,0,0,0,0,0,0},
-						{7,0,7,0,7,0,7,0,7},
-						{0,6,0,0,0,0,0,6,0},
-						{0,0,0,0,0,0,0,0,0},
-						{1,2,3,4,5,4,3,2,1}
-				};
-				repaint();
+				
 			}
 		});
 		

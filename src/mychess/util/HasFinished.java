@@ -19,7 +19,7 @@ public class HasFinished {
 		for(int i=0;i<all.size();i++){
 			for(int j=0;j<all.get(i).size();j++){
 				int[] current=all.get(i).get(j);
-				int[][] datasub=BackData.Backup(data);
+				int[][] datasub=Common.Backup(data);
 				datasub[current[2]][current[3]]=datasub[current[0]][current[1]];
 				datasub[current[0]][current[1]]=0;
 				if((isRed && isJiang(datasub)) || 
@@ -33,7 +33,7 @@ public class HasFinished {
 	private List<List<int[]>> all_move(boolean isRed) {// 红方或者蓝方此时能动的所有子
 		List<List<int[]>> all = new ArrayList<>();
 		CanMove cm = new CanMove();
-		int[][] datasub = BackData.Backup(data);
+		int[][] datasub = Common.Backup(data);
 		for (int i = 0; i < datasub.length; i++) {
 			for (int j = 0; j < datasub[i].length; j++) {
 				if ((isRed && datasub[i][j] > 7) ||
