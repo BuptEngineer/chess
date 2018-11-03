@@ -3,7 +3,17 @@ package mychess.util;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 这是用在给定的棋局中，对于给的一个固定位置上的棋子，该棋子所有能走的位置的类
+ */
 public class CanMove {
+	/**
+	 * 获取在(i,j)位置上的车,能在当前棋局data中所有可能移动的位置集合
+	 * @param data是当前棋局数组，i是棋局中的行坐标从0开始,j是棋局中的列坐标从0开始,
+	 * 		label是当前标签（车）<br>
+	 * 		返回的是一个列表，这个列表包含所有的可能位置集合。可能位置由两对坐标组成，分别是移动前的坐标和
+	 * 		可能移动后的坐标
+	 */
 	public List<int[]> che_move(int[][] data,int i,int j,int label) {
 		List<int[]> retList=new ArrayList<int[]>();
 		//是车

@@ -24,29 +24,29 @@ import mychess.util.JudgeMove;
 public class ChessBoard extends JPanel implements MouseListener,Runnable{
 	/** serialVersionUID*/
 	private static final long serialVersionUID = 1L;
-	private int col;
-	private int row;
-	private boolean tip;
-	private boolean isSelected;
-	private int precol;
-	private int prerow;
-	private boolean yourTurn;
-	private int[][] data;
-	private Image[] pics;
-	private Redo rd;
-	private Internet internet;
-	private boolean observer;
+	private int col;//现在棋子所处的列
+	private int row;//现在棋子所处的行
+	private boolean tip;//是否重绘的时候加上提示（也就是走棋的时候有标记）
+	private boolean isSelected;//棋子是否被选中，决定下一步点击是移动棋子还是在选择棋子
+	private int precol;//上一步棋子所处的列
+	private int prerow;//上一步棋子所处的行
+	private boolean yourTurn;//是不是到你的回合
+	private int[][] data;//当前棋局的状态数组,用于重绘
+	private Image[] pics;//加载象棋的图片
+	private Redo rd;//悔棋的所有棋局列表
+	private Internet internet;//数据服务器对象
+	private boolean observer;//是否是观察者角色
 	private boolean isRed;//是否是红方
 	private boolean isRedo;//是否悔棋
-	private Commication cc;//消息服务
+	private Commication cc;//消息服务器对象
 	private byte state=0;//状态0表示空闲, 1表示准备,2表示游戏开始,3表示游戏进行中,4表示游戏结束
 	
 	public ChessBoard(Image[] pics,Redo rd) {
 		// TODO Auto-generated constructor stub
 		this.pics=pics;
 		this.rd=rd;
-		internet=new Internet();
-		//判断角色
+		internet=new Internet();//开启数据服务器，至于消息服务器需要手动提前开启
+		//判断角色和获取棋局初始状态
 		String message=internet.readMessage();
 		String message_array=internet.readMessage();
 		data=Common.String_to_Array(message_array);
@@ -59,11 +59,12 @@ public class ChessBoard extends JPanel implements MouseListener,Runnable{
 		else if(message.endsWith("false")) state=2;
 		else observer=true;
 		
-		addMouseListener(this);
-		Thread t=new Thread(this);//数据服务
+		addMouseListener(this);//监听鼠标操作
+		
+		Thread t=new Thread(this);//数据服务交互
 		t.start();
 		cc=new Commication(this);
-		Thread t2=new Thread(cc);//消息服务
+		Thread t2=new Thread(cc);//消息服务交互
 		t2.start();
 	}
 	
@@ -193,8 +194,11 @@ public class ChessBoard extends JPanel implements MouseListener,Runnable{
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		// TODO Auto-generated method stub
-		if(!yourTurn || observer || state==4) return;
-		//确定位置
+		if(!yourTurn || observer || state==4) return;//如果不是自己回合或者角色为旁观者或者当前游戏状态已经结束
+													//则无法点击棋盘
+		//确定位置，获取现在棋子的列和行
+		//如果isSelected为假，那么这个列col和行row将是下次isSelected为真的时候之前的preCol和preRow
+		//如果isSelected为真，那么这个列col和行row将是现在的col和row
 		int width=getWidth();
 		int height=getHeight();
 		int x=e.getX();
@@ -212,7 +216,7 @@ public class ChessBoard extends JPanel implements MouseListener,Runnable{
 			}
 		}
 		
-		if(isSelected){
+		if(isSelected){//如果已经选中了棋子，接下来就是移动棋子操作（此时四个坐标已经确定了）
 			//判断能不能到
 			//先判断是否被将军
 			int[] aixs=new int[4];
@@ -226,20 +230,20 @@ public class ChessBoard extends JPanel implements MouseListener,Runnable{
 			
 			int label=data[prerow-1][precol-1];//选中的是什么棋
 			
-			JudgeMove jm=new JudgeMove(this,data,isRed);
+			JudgeMove jm=new JudgeMove(this,data,isRed);//移动规则判断对象
 			switch (label) {
 				case 1:
 				case 8:
 					//是车
-					if(!jm.move_che(aixs)){
-						common_op(aixs);
+					if(!jm.move_che(aixs)){//移动车的规则不合理
+						common_op(aixs);//撤销、恢复坐标
 						return;
 					}
 					break;
 				case 2:
 				case 9:
 					//是马
-					if(!jm.move_ma(aixs)){
+					if(!jm.move_ma(aixs)){//移动马的规则不合理
 						common_op(aixs);
 						return;
 					}
@@ -288,59 +292,62 @@ public class ChessBoard extends JPanel implements MouseListener,Runnable{
 					break;
 			}
 			
-			
-			//在此处验证是否被将军
-			int[][] datasub=Common.Backup(data);
+			//可以进行移动
+			int[][] datasub=Common.Backup(data);//先备份棋局，下面进行试探性走棋
 			datasub[row-1][col-1]=datasub[prerow-1][precol-1];
 			datasub[prerow-1][precol-1]=0;
-			if(new HasFinished(datasub).isFinished(isRed)){
-				data=datasub;
+			//判断试探性走棋是否到达游戏结束状态
+			if(new HasFinished(datasub).isFinished(isRed)){//游戏结束
+				data=datasub;//将当前棋局置为试探性走棋后的棋局
 				tip=false;
 				isRedo=true;
 				repaint();
 				internet.writeMessage("Congratulate,you win.");
-				//写入
+				//写入悔棋列表中
 				rd.add_one_step(Common.Backup(datasub));
 				SimpleDateFormat sf=new SimpleDateFormat("YYYYMMDD_HHmmss");
+				//写入自动播放的录像中
 				Replay.WriteFile(rd.getMove_down(), "file/"+sf.format(new Date())+".chess");
-				state=4;
+				state=4;//将游戏状态置为结束
 				return;
 			}
 			
-			if(!HasFinished.jiangTip(datasub, isRed)){
+			if(!HasFinished.jiangTip(datasub, isRed)){//当前被将军了，不能送将
 				if(!isRed)
 					prerow=11-prerow;//恢复，解决被将军后移动其他子问题
 				isSelected=true;
 				return;
 			}//当前步不能走
-//			rd.add_one_step(Common.Backup(data));//将当前步加入列表中
+
+			//到此，表明移动的步符合走棋规则、而且没有送将、以及游戏没有结束
 			internet.writeMessage(prerow+" "+precol+" "+row+" "+col);//向服务器写消息
-			isSelected=false;
-			isRedo=false;
-		}else{//选子阶段
+			isSelected=false;//被选中为false，这样下阶段是选择棋子，而不是移动棋子
+			isRedo=false;//是走棋，而不是悔棋到达的新棋局状态
+		}else{//选子阶段，这是isSelected为false的情况
 			precol=col;
 			prerow=row;
-			if(!isRed){
+			if(!isRed){//置换视角
 				prerow=11-prerow;
 				row=11-row;
 			}
-			if(precol==0 || prerow==0)
+			if(precol==0 || prerow==0)//没有选中棋盘
 				return;
-			//两人对弈
-			if(data[prerow-1][precol-1]==0){
+
+			if(data[prerow-1][precol-1]==0){//没有选中棋子
 				return;
 			}else if((isRed && data[prerow-1][precol-1]>=8) || 
-					(!isRed && data[prerow-1][precol-1]<=7)){
+					(!isRed && data[prerow-1][precol-1]<=7)){//选择对方的棋子了
 				return;
 			}
-			tip=true;
-			isSelected=true;
-			//恢复
+			//到此合理选择了棋子
+			tip=true;//开启提示功能
+			isSelected=true;//设置isSelected为真，下一阶段是移动棋子而不是选择棋子
+			//恢复视角
 			if(!isRed){
 				prerow=11-prerow;
 				row=11-row;
 			}
-			repaint();//解决了选中问题
+			repaint();
 		}
 	}
 
@@ -349,6 +356,7 @@ public class ChessBoard extends JPanel implements MouseListener,Runnable{
 	public void mouseEntered(MouseEvent e) {}
 	public void mouseExited(MouseEvent e) {}
 
+	//下面是set和get方法
 	public boolean isSelected() {
 		return isSelected;
 	}
@@ -388,24 +396,25 @@ public class ChessBoard extends JPanel implements MouseListener,Runnable{
 	public Commication getCc() {
 		return cc;
 	}
-	
-	public ChessBoard Refresh() {
-		return new ChessBoard(pics, rd);
-	}
 
+	/**
+	 * 与数据服务器和消息服务器进行交互
+	 */
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
 		while(true){
 			String message_array=internet.readMessage();
-			state=3;//游戏中
-			if(message_array.indexOf(",")>0){
+			state=3;//设置游戏状态为游戏中
+			if(message_array.indexOf(",")>0){//这是接收的是消息
 				//结束消息
 				JOptionPane.showMessageDialog(null, message_array);
 				continue;
 			}
+			//下面接收的是数据
 		    int[][]	datasub=Common.String_to_Array(message_array);
 		    int[] aixs=Common.FindDiff(data, datasub,isRed);
+		    //获取相对的四个坐标（因为红和视角问题，对于行的设置不同，这里用相对）
 		    prerow=aixs[0];
 		    if(!isRed) prerow=11-prerow;
 		    precol=aixs[1];
@@ -413,14 +422,19 @@ public class ChessBoard extends JPanel implements MouseListener,Runnable{
 		    if(!isRed)
 		    	row=11-row;
 		    col=aixs[3];
-		    data=datasub;
-		    rd.add_one_step(Common.Backup(data));
+		    
+		    data=datasub;//将棋局状态置为从服务器中获取的最新的棋局状态数据
+		    rd.add_one_step(Common.Backup(data));//将该棋局加入的悔棋列表中
 			tip=false;
 			repaint();
-			yourTurn=!yourTurn;
+			yourTurn=!yourTurn;//回合切换
 		}
 	}
 	
+	/**
+	 * 这是提取的公共操作，用于在不合理的移动棋子时候能恢复到移动前的坐标状态
+	 * @param aixs是两个位置的坐标数组
+	 */
 	private void common_op(int[] aixs) {
 		if(isRed){
 			prerow=row=aixs[0];
@@ -431,4 +445,3 @@ public class ChessBoard extends JPanel implements MouseListener,Runnable{
 		repaint();
 	}
 }
-//黑色子能吃己方子问题解决....

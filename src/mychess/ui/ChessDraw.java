@@ -25,8 +25,8 @@ public class ChessDraw extends JFrame{
 	private JButton restart=new JButton("重新开始");
 	private JButton video=new JButton("播放录像");
 	private JButton cancel=new JButton("悔棋");
-	private Redo rd=new Redo();
-	private Image[] pics =new Image[15];
+	private Redo rd=new Redo(); //依赖悔棋的类
+	private Image[] pics =new Image[15];//加载象棋图片
 	private Timer timer;//动画
 	private int num=0;//播放起始位置
 
@@ -58,15 +58,7 @@ public class ChessDraw extends JFrame{
 		pics[13]=Toolkit.getDefaultToolkit().getImage("images/炮2.png");
 		pics[14]=Toolkit.getDefaultToolkit().getImage("images/卒.png");
 		
-		restart.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-		});
-		
-		cancel.addActionListener(new ActionListener() {
+		cancel.addActionListener(new ActionListener() {//悔棋功能
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -85,7 +77,7 @@ public class ChessDraw extends JFrame{
 			}
 		});
 
-		video.addActionListener(new ActionListener() {
+		video.addActionListener(new ActionListener() {//录像功能
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {

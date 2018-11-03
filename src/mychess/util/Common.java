@@ -1,6 +1,13 @@
 package mychess.util;
 
+/**
+ * 这是工具类中公共部分
+ */
 public class Common {
+	/**
+	 * 备份当前棋局数组，可以使用clone代替
+	 * @param data是当前棋局
+	 */
 	public static int[][] Backup(int[][] data) {
 		int[][] sub=new int[data.length][data[0].length];
 		for(int i=0;i<data.length;i++){
@@ -11,6 +18,10 @@ public class Common {
 		return sub;
 	}
 	
+	/**
+	 * 将字符串转换为数组
+	 * @param temp是给的字符串
+	 */
 	public static int[][] String_to_Array(String temp) {
 		String[] lines=temp.split("\n");
 		int[][] datasub=new int[10][9];
@@ -23,6 +34,10 @@ public class Common {
 		return datasub;
 	}
 	
+	/**
+	 * 将数组转换为字符串
+	 * @param data是棋局数组
+	 */
 	public static String Array_to_String(int[][] data) {
 		String temp="";
 		for(int i=0;i<data.length;i++){
@@ -34,6 +49,10 @@ public class Common {
 		return temp;
 	}
 	
+	/**
+	 * 这是对于两个给的数组，发现其中不同的点，将不同点转化为两对坐标组成数组
+	 * @param
+	 */
 	public static int[] FindDiff(int[][] data1,int[][] data2,boolean isRed) {//可优化
 		int[] aixs=new int[5];
 		for(int i=0;i<data1.length;i++)

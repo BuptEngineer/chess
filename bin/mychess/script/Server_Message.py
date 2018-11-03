@@ -32,7 +32,7 @@ class Server_Message(object):
                          return 1
 
 if __name__=='__main__':
-    print('open')
+    print('Service...')
     Server_Message('127.0.0.1',12456).service()
                        
                

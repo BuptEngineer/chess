@@ -2,16 +2,29 @@ package mychess.util;
 
 import mychess.ui.ChessBoard;
 
+/**
+ * 移动规则类
+ */
 public class JudgeMove {
-	ChessBoard cb;
+	ChessBoard cb;//依赖棋盘对象
 	private int[][] data=new int[10][9];
 	private boolean isRed;
+	
+	/**
+	 * 初始化棋盘对象、棋局数组、执棋角色
+	 * @param
+	 */
 	public JudgeMove(ChessBoard cb,int[][] data,boolean isRed) {
 		// TODO Auto-generated constructor stub
 		this.cb=cb;
 		this.data=Common.Backup(data);
 		this.isRed=isRed;
 	}
+	
+	/**
+	 * 判断车的移动是否合理
+	 * @param aixs是移动之前和之后的两对坐标
+	 */
 	public boolean move_che(int[] aixs) {
 		if((isRed && data[aixs[2]-1][aixs[3]-1]<8 && data[aixs[2]-1][aixs[3]-1]>0)
 				|| (!isRed && data[aixs[2]-1][aixs[3]-1]>=8)){

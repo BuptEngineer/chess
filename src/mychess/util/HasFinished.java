@@ -5,15 +5,25 @@ import java.util.List;
 
 import javax.swing.JOptionPane;
 
-//判断是否游戏结束
+/**
+ * 用于判断游戏是否结束的类
+ */
 public class HasFinished {
 	private int[][] data;
 
+	/**
+	 * 初始化当前棋局状态数组
+	 * @param data是传进来的棋局数组
+	 */
 	public HasFinished(int[][] data) {
 		// TODO Auto-generated constructor stub
 		this.data = data;
 	}
 	
+	/**
+	 * 判断游戏是否结束
+	 * @param isRed是当前执棋的角色
+	 */
 	public boolean isFinished(boolean isRed) {
 		//将军被吃
 		if(isRed && !Shuai_exists(data)){
@@ -37,6 +47,11 @@ public class HasFinished {
 		return true;
 	}
 
+	/**
+	 * 获取当前角色所有可以移动坐标的集合
+	 * @param isRed是当前角色,
+	 * 			返回的是List的List,里面的List是对于每个标签的所有移动坐标集合，外面的List是所有标签的移动集合
+	 */
 	private List<List<int[]>> all_move(boolean isRed) {// 红方或者蓝方此时能动的所有子
 		List<List<int[]>> all = new ArrayList<>();
 		CanMove cm = new CanMove();
@@ -91,7 +106,10 @@ public class HasFinished {
 		return all;
 	}
 
-	// 是否被将军
+	/**
+	 * 是否被将军
+	 * @param subuc是当前棋局数组的备份数组
+	 */
 	public static boolean isJiang(int[][] subuc) {
 		int jx = -1;
 		int jy = -1;
@@ -267,6 +285,10 @@ public class HasFinished {
 		return false;
 	}
 
+	/**
+	 * 帅是否被将军
+	 * @param subuc是棋局备份数组
+	 */
 	public static boolean isShuai(int[][] subuc) {
 		// 看是否被车将军
 		int jx = -1;
@@ -446,6 +468,10 @@ public class HasFinished {
 		return false;
 	}
 	
+	/**
+	 * 判断当前走是否在送将，并回执给上层一个信号（true or false)
+	 * @param datasub是棋局备份数组,yourTurn是否到自己的回合
+	 */
 	public static boolean jiangTip(int[][] datasub,boolean yourTurn) {
 		if((yourTurn && isShuai(datasub))
 				|| (!yourTurn && isJiang(datasub))){
@@ -455,7 +481,10 @@ public class HasFinished {
 		return true;
 	}
 	
-	
+	/**
+	 * 判断帅是否在九宫中
+	 * @param data是棋局数组
+	 */
 	private boolean Shuai_exists(int[][] data) {
 		for(int i=7;i<=9;i++)
 			for(int j=3;j<=5;j++)
@@ -464,6 +493,10 @@ public class HasFinished {
 		return false;
 	}
 	
+	/**
+	 * 判断将是否在九宫中
+	 * @param data是棋局数组
+	 */
 	private boolean Jiang_exists(int[][] data) {
 		for(int i=0;i<=2;i++)
 			for(int j=3;j<=5;j++)
