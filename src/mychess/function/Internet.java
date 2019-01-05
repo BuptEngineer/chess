@@ -1,17 +1,22 @@
 package mychess.function;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 
+import javax.swing.JOptionPane;
+
+import mychess.entity.Message;
+
 /**
- * 和Commication类相似，这是对应于数据服务器的类
+ * 用于网络通信的类
  */
 public class Internet{
 	private Socket socket;
-	private DataInputStream inputStreamFromServer;
-	private DataOutputStream outputStreamToServer;
+	private ObjectInputStream inputStreamFromServer;
+	private ObjectOutputStream outputStreamToServer;
 	
 	/**
 	 * 对数据服务器进行连接
@@ -20,9 +25,9 @@ public class Internet{
 	public Internet() {
 		// TODO Auto-generated constructor stub
 		try {
-			socket=new Socket("127.0.0.1", 12356);
-			inputStreamFromServer=new DataInputStream(socket.getInputStream());
-			outputStreamToServer=new DataOutputStream(socket.getOutputStream());
+			socket=new Socket("127.0.0.1", 12357);
+			outputStreamToServer=new ObjectOutputStream(socket.getOutputStream());
+			inputStreamFromServer=new ObjectInputStream(socket.getInputStream());//阻塞直到对面的outputstream开启
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -33,9 +38,9 @@ public class Internet{
 	 * 给数据服务器发送消息
 	 * @param message是要发送给数据服务器的本地消息
 	 */
-	public void writeMessage(String message) {
+	public void writeMessage(Message message) {
 		try {
-			outputStreamToServer.writeUTF(message);
+			outputStreamToServer.writeObject(message);
 			outputStreamToServer.flush();//清空缓存区
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -56,22 +61,23 @@ public class Internet{
 	 * 从数据服务器读消息
 	 * @param
 	 */
-	public String readMessage() {
-		String message = null;
+	public Message readMessage() {
+		Message message = null;
 		try {
-			message=inputStreamFromServer.readUTF();
+			message=(Message) inputStreamFromServer.readObject();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			//对方关闭了连接,当服务器关闭连接的时候触发
-			try {
-				socket.close();
-				inputStreamFromServer.close();
-				outputStreamToServer.close();
-				System.exit(1);
-			} catch (IOException ex) {
-				// TODO Auto-generated catch block
-				ex.printStackTrace();
-			}
+//			try {
+//				socket.close();
+//				inputStreamFromServer.close();
+//				outputStreamToServer.close();
+//				System.exit(1);
+//			} catch (IOException ex) {
+//				// TODO Auto-generated catch block
+//				ex.printStackTrace();
+//			}
+			e.printStackTrace();
 		}
 		return message;
 	}
