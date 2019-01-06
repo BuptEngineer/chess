@@ -34,7 +34,7 @@ public class ChessBoard extends JPanel implements MouseListener,Runnable{
 		pics=pictures;
 		internet=new Internet();//开启数据服务器，至于消息服务器需要手动提前开启
 		message= (DataMessage) internet.readMessage();
-		data=message.getData();
+		data=Common.String_to_Array(message.getData());
 		addMouseListener(this);//监听鼠标操作
 		Thread t=new Thread(this);//数据服务交互
 		t.start();
@@ -128,7 +128,7 @@ public class ChessBoard extends JPanel implements MouseListener,Runnable{
 		int prerow=message.getPrerow();
 		int col=message.getCol();
 		int row=message.getRow();
-		if(message.isYourTurn()){
+		if((message.isYourTurn() || message.getRole()>2) && message.getCode()==Code.Run){//或者是旁观者
 			//画对方的提示
 			g.setColor(Color.GREEN);
 			g.drawLine(precol*width/11-width/22, prerow*height/12-height/24, precol*width/11-width/44, prerow*height/12-height/24);
@@ -372,16 +372,16 @@ public class ChessBoard extends JPanel implements MouseListener,Runnable{
 			message.setPrecol(((DataMessage) myMessage).getPrecol());
 			message.setRow(((DataMessage) myMessage).getRow());
 			message.setCol(((DataMessage) myMessage).getCol());
-			System.out.println(message.getPrerow()+","+message.getPrecol()+","+message.getRow()+","+message.getCol());
 			if(message.getRole()==2){
 				message.setPrerow(11-message.getPrerow());
 				message.setRow(11-message.getRow());
 			}
 			
-			data=((DataMessage)myMessage).data;
+			data=Common.String_to_Array(((DataMessage)myMessage).data);
 			tip=false;
 			repaint();
-			message.setYourTurn(!message.isYourTurn());
+			if(message.getRole()<=2)
+				message.setYourTurn(!message.isYourTurn());//旁观者的turn为false
 		}
 	}
 	

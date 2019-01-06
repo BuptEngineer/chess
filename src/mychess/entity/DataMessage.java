@@ -22,10 +22,8 @@ public class DataMessage extends Message implements Serializable{
 	
 	public int eatedChess;//被吃掉的棋子
 	
-	public int[][] data;//数据
+	public String data;//数据
 
-	public Image[] pics;//图片
-	
 	public int getPrerow() {
 		return prerow;
 	}
@@ -74,25 +72,12 @@ public class DataMessage extends Message implements Serializable{
 		this.eatedChess = eatedChess;
 	}
 
-	public int[][] getData() {
-		return data;
-	}
-
-	public void setData(int[][] data) {
+	public void setData(String data) {
 		this.data = data;
 	}
 	
-	public void setPics(Image[] pics) {
-		this.pics = pics;
-	}
-	
-	public Image[] getPics() {
-		return pics;
-	}
-	
-	public void changeArray() {
-		data[row-1][col-1]=data[prerow-1][precol-1];
-		data[prerow-1][precol-1]=0;//自动更新
+	public String getData() {
+		return data;
 	}
 	
 	public void resever() {

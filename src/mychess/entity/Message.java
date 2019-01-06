@@ -69,6 +69,7 @@ public class Message implements Serializable,Cloneable{
 		this.yourTurn = yourTurn;
 	}
 	
+	@Override
 	public Message clone() throws CloneNotSupportedException {
 		// TODO Auto-generated method stub
 		return (Message) super.clone();

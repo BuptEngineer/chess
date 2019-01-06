@@ -9,7 +9,8 @@ import mychess.entity.Code;
 import mychess.entity.DataMessage;
 import mychess.entity.Message;
 import mychess.entity.MyObjectOutputStream;
-import java.awt.Image;
+import mychess.util.Common;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -30,8 +31,6 @@ public class Server {
 	 */
 	private static int[][] data;
 	
-	private Image[] pics;//加载象棋图片
-	
 	/**
 	 * 完成初始化功能<br>
 	 * 初始化连接客户端的列表,棋局的初始状态设置，悔棋列表，以及为每个连接的客户端以单独线程与之交互
@@ -45,7 +44,7 @@ public class Server {
 		clients=new ArrayList<Socket>();//已经连接的客户端
 		try{
 			//创建Socket
-			socket=new ServerSocket(12357);
+			socket=new ServerSocket(Integer.parseInt(ReadProperties.PORT));
 			while(true){
 				Socket socket_current=socket.accept();
 				clients.add(socket_current);
@@ -60,6 +59,8 @@ public class Server {
 	//加载数据
 	private void init() {
 		// TODO Auto-generated method stub
+		ReadProperties.read();//读取配置文件
+		
 		data=new int[][]{{8,9,10,11,12,11,10,9,8},
 			{0,0,0,0,0,0,0,0,0},
 			{0,13,0,0,0,0,0,13,0},
@@ -108,8 +109,7 @@ public class Server {
 					message.setRole((byte)1);
 					message.setYourTurn(true);
 					message.setCode(Code.Prepare);
-					message.setData(data);
-					message.setPics(pics);
+					message.setData(Common.Array_to_String(data));
 					outputStreamToOtherClients.writeObject(message);
 					outputStreamToOtherClients.flush();
 				}else if(clients.size()==2){
@@ -117,15 +117,14 @@ public class Server {
 					message.setRole((byte)2);
 					message.setYourTurn(false);
 					message.setCode(Code.Run);
-					message.setData(data);
-					message.setPics(pics);
+					message.setData(Common.Array_to_String(data));
 					outputStreamToOtherClients.writeObject(message);
 					outputStreamToOtherClients.flush();
-				}else{
+				}else if(clients.size()>2){
 					//其余用户设定为旁观者
 					message.setRole((byte)3);
-					message.setData(data);
-					message.setPics(pics);
+					message.setYourTurn(false);
+					message.setData(Common.Array_to_String(data));
 					outputStreamToOtherClients.writeObject(message);
 					outputStreamToOtherClients.flush();
 				}
@@ -136,9 +135,9 @@ public class Server {
 					//不管收到什么消息，负责直接转发
 					Message myMessage=(Message) inputStreamFromClient.readObject();//接收到红方的消息
 					if(myMessage instanceof DataMessage){
-						((DataMessage) myMessage).setData(data);
-						((DataMessage) myMessage).changeArray();
-						data=((DataMessage) myMessage).getData();//服务端更新数据
+						data[((DataMessage) myMessage).getRow()-1][((DataMessage) myMessage).getCol()-1]=data[((DataMessage) myMessage).getPrerow()-1][((DataMessage) myMessage).getPrecol()-1];
+						data[((DataMessage) myMessage).getPrerow()-1][((DataMessage) myMessage).getPrecol()-1]=0;
+						((DataMessage) myMessage).setData(Common.Array_to_String(data));
 					}
 					
 					for(Socket s:clients){

@@ -8,6 +8,8 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import mychess.script.ReadProperties;
+
 
 //该类实现象棋的图形界面,并负责通信
 public class ChessDraw extends JFrame{
@@ -48,6 +50,7 @@ public class ChessDraw extends JFrame{
 	}
 	
 	public static void main(String[] args) {
+		ReadProperties.read();//读取配置文件
 		JFrame frame=new ChessDraw();
 		frame.setTitle("象棋");
 		frame.setExtendedState(JFrame.MAXIMIZED_BOTH);

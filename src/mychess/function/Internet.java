@@ -6,6 +6,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 import mychess.entity.Message;
+import mychess.script.ReadProperties;
 
 /**
  * 用于网络通信的类
@@ -22,7 +23,7 @@ public class Internet{
 	public Internet() {
 		// TODO Auto-generated constructor stub
 		try {
-			socket=new Socket("127.0.0.1", 12357);
+			socket=new Socket(ReadProperties.IP, Integer.parseInt(ReadProperties.PORT));
 			outputStreamToServer=new ObjectOutputStream(socket.getOutputStream());
 			inputStreamFromServer=new ObjectInputStream(socket.getInputStream());//阻塞直到对面的outputstream开启
 		} catch (IOException e) {
@@ -42,15 +43,16 @@ public class Internet{
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			//这里处理异常，当服务器的流关闭的时候触发该异常
-			try {
-				socket.close();
-				inputStreamFromServer.close();
-				outputStreamToServer.close();
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-			System.exit(1);//发生异常退出
+//			try {
+//				socket.close();
+//				inputStreamFromServer.close();
+//				outputStreamToServer.close();
+//			} catch (IOException e1) {
+//				// TODO Auto-generated catch block
+//				e1.printStackTrace();
+//			}
+//			System.exit(1);//发生异常退出
+			e.printStackTrace();
 		}
 	}
 	
