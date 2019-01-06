@@ -4,6 +4,9 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -19,7 +22,7 @@ public class ChessDraw extends JFrame{
 	private JButton video=new JButton("播放录像");
 	private JButton cancel=new JButton("悔棋");
 	private Image[] pics =new Image[15];//加载象棋图片
-	
+
 	public ChessDraw() {
 		pics[1]=Toolkit.getDefaultToolkit().getImage("images/车1.png");
 		pics[2]=Toolkit.getDefaultToolkit().getImage("images/马1.png");
@@ -47,6 +50,16 @@ public class ChessDraw extends JFrame{
 		cancel.setBackground(new Color(216,196,152));
 		panel2.setBackground(new Color(216,196,152));
 		panel.setBackground(new Color(216,196,152));
+		
+		//绑定事件
+		cancel.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				panel.Redo();
+			}
+		});
 	}
 	
 	public static void main(String[] args) {

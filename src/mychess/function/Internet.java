@@ -43,16 +43,15 @@ public class Internet{
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			//这里处理异常，当服务器的流关闭的时候触发该异常
-//			try {
-//				socket.close();
-//				inputStreamFromServer.close();
-//				outputStreamToServer.close();
-//			} catch (IOException e1) {
-//				// TODO Auto-generated catch block
-//				e1.printStackTrace();
-//			}
-//			System.exit(1);//发生异常退出
-			e.printStackTrace();
+			try {
+				socket.close();
+				inputStreamFromServer.close();
+				outputStreamToServer.close();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			System.exit(1);//发生异常退出
 		}
 	}
 	

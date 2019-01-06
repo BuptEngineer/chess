@@ -364,7 +364,23 @@ public class ChessBoard extends JPanel implements MouseListener,Runnable{
 			message.setCode(Code.Run);
 			if(myMessage instanceof NormalMessage){
 				//如果是消息
-				JOptionPane.showMessageDialog(null, ((NormalMessage) myMessage).getAttach());
+				if(((NormalMessage) myMessage).getAttach().equals("悔棋")){
+					int showConfirmDialog = JOptionPane.showConfirmDialog(null, "对方请求悔棋，是否同意");
+					if(message.getRole()>2) continue;//旁观者清
+					if(showConfirmDialog==JOptionPane.YES_OPTION){
+						//发个同意的消息
+						NormalMessage temp=new NormalMessage();
+						temp.setAttach("同意悔棋");
+						internet.writeMessage(temp);
+					}else if(showConfirmDialog==JOptionPane.NO_OPTION){
+						//不同意悔棋
+						NormalMessage temp=new NormalMessage();
+						temp.setAttach("对方不同意悔棋");
+						internet.writeMessage(temp);
+					}
+				}
+				if(filterMessage(myMessage))
+					JOptionPane.showMessageDialog(null, ((NormalMessage) myMessage).getAttach());
 				continue;
 			}
 			//如果是数据
@@ -380,8 +396,7 @@ public class ChessBoard extends JPanel implements MouseListener,Runnable{
 			data=Common.String_to_Array(((DataMessage)myMessage).data);
 			tip=false;
 			repaint();
-			if(message.getRole()<=2)
-				message.setYourTurn(!message.isYourTurn());//旁观者的turn为false
+			message.setYourTurn(!message.isYourTurn());
 		}
 	}
 	
@@ -400,5 +415,20 @@ public class ChessBoard extends JPanel implements MouseListener,Runnable{
 		message.setPrecol(aixs[1]);
 		message.setCol(aixs[1]);
 		repaint();
+	}
+	
+	public void Redo() {
+		//执行悔棋
+		//向服务器写悔棋请求数据
+		NormalMessage message=new NormalMessage();
+		message.setAttach("悔棋");
+		internet.writeMessage(message);
+	}
+	
+	public boolean filterMessage(Message message) {
+		//过滤消息
+		if(((NormalMessage)message).getAttach().equals("悔棋"))
+			return false;
+		return true;
 	}
 }

@@ -9,6 +9,8 @@ import mychess.entity.Code;
 import mychess.entity.DataMessage;
 import mychess.entity.Message;
 import mychess.entity.MyObjectOutputStream;
+import mychess.entity.NormalMessage;
+import mychess.function.Withdraw;
 import mychess.util.Common;
 
 import java.io.IOException;
@@ -31,6 +33,8 @@ public class Server {
 	 */
 	private static int[][] data;
 	
+	private Withdraw withdraw;//撤销功能
+	
 	/**
 	 * 完成初始化功能<br>
 	 * 初始化连接客户端的列表,棋局的初始状态设置，悔棋列表，以及为每个连接的客户端以单独线程与之交互
@@ -42,6 +46,7 @@ public class Server {
 		//new Redo();
 		ServerSocket socket;
 		clients=new ArrayList<Socket>();//已经连接的客户端
+		withdraw=new Withdraw();
 		try{
 			//创建Socket
 			socket=new ServerSocket(Integer.parseInt(ReadProperties.PORT));
@@ -138,10 +143,18 @@ public class Server {
 						data[((DataMessage) myMessage).getRow()-1][((DataMessage) myMessage).getCol()-1]=data[((DataMessage) myMessage).getPrerow()-1][((DataMessage) myMessage).getPrecol()-1];
 						data[((DataMessage) myMessage).getPrerow()-1][((DataMessage) myMessage).getPrecol()-1]=0;
 						((DataMessage) myMessage).setData(Common.Array_to_String(data));
+						withdraw.add(myMessage);//收到报文就加入到列表中
+					}else if(myMessage instanceof NormalMessage){
+						//一般消息
+						if(((NormalMessage) myMessage).getAttach().equals("同意悔棋")){
+							withdraw.remove();
+							myMessage=(DataMessage) withdraw.getLast();
+							myMessage.setValid(false);//发给所有人
+							data=Common.String_to_Array(((DataMessage)myMessage).getData());//撤销后的棋局
+						}
 					}
-					
 					for(Socket s:clients){
-						if(s==current_socket) continue;
+						if(s==current_socket && myMessage.isValid()) continue;//如果valid为false表明发给任何人
 						outputStreamToOtherClients=new MyObjectOutputStream(s.getOutputStream());//
 						outputStreamToOtherClients.writeObject(myMessage);
 						outputStreamToOtherClients.flush();
