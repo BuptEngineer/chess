@@ -94,4 +94,10 @@ public class DataMessage extends Message implements Serializable{
 		data[row-1][col-1]=data[prerow-1][precol-1];
 		data[prerow-1][precol-1]=0;//自动更新
 	}
+	
+	public void resever() {
+		//反转行
+		prerow=11-prerow;
+		precol=11-precol;
+	}
 }

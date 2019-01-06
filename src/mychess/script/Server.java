@@ -5,19 +5,11 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.JOptionPane;
-
 import mychess.entity.Code;
 import mychess.entity.DataMessage;
 import mychess.entity.Message;
 import mychess.entity.MyObjectOutputStream;
-import mychess.entity.NormalMessage;
-
 import java.awt.Image;
-import java.awt.Toolkit;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -143,8 +135,6 @@ public class Server {
 					//这会引发异常
 					//不管收到什么消息，负责直接转发
 					Message myMessage=(Message) inputStreamFromClient.readObject();//接收到红方的消息
-					//Message myMessage=getLastMessage(inputStreamFromClient);
-					//JOptionPane.showMessageDialog(null, ((DataMessage) myMessage).getPrerow()+","+((DataMessage) myMessage).getPrecol()+","+((DataMessage) myMessage).getRow()+","+((DataMessage) myMessage).getCol()+","+current_socket.getRemoteSocketAddress());
 					if(myMessage instanceof DataMessage){
 						((DataMessage) myMessage).setData(data);
 						((DataMessage) myMessage).changeArray();

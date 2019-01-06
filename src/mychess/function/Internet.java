@@ -1,12 +1,9 @@
 package mychess.function;
 
 import java.io.IOException;
-import java.io.ObjectInput;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-
-import javax.swing.JOptionPane;
 
 import mychess.entity.Message;
 
@@ -67,16 +64,6 @@ public class Internet{
 			message=(Message) inputStreamFromServer.readObject();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			//对方关闭了连接,当服务器关闭连接的时候触发
-//			try {
-//				socket.close();
-//				inputStreamFromServer.close();
-//				outputStreamToServer.close();
-//				System.exit(1);
-//			} catch (IOException ex) {
-//				// TODO Auto-generated catch block
-//				ex.printStackTrace();
-//			}
 			e.printStackTrace();
 		}
 		return message;
