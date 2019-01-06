@@ -12,6 +12,9 @@ import mychess.entity.DataMessage;
 import mychess.entity.Message;
 import mychess.entity.MyObjectOutputStream;
 import mychess.entity.NormalMessage;
+
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.EOFException;
@@ -34,6 +37,8 @@ public class Server {
 	 * 这可以为旁观者提供及时准确的数据<br>
 	 */
 	private static int[][] data;
+	
+	private Image[] pics;//加载象棋图片
 	
 	/**
 	 * 完成初始化功能<br>
@@ -60,6 +65,7 @@ public class Server {
 		}
 	}
 	
+	//加载数据
 	private void init() {
 		// TODO Auto-generated method stub
 		data=new int[][]{{8,9,10,11,12,11,10,9,8},
@@ -111,6 +117,7 @@ public class Server {
 					message.setYourTurn(true);
 					message.setCode(Code.Prepare);
 					message.setData(data);
+					message.setPics(pics);
 					outputStreamToOtherClients.writeObject(message);
 					outputStreamToOtherClients.flush();
 				}else if(clients.size()==2){
@@ -119,12 +126,14 @@ public class Server {
 					message.setYourTurn(false);
 					message.setCode(Code.Run);
 					message.setData(data);
+					message.setPics(pics);
 					outputStreamToOtherClients.writeObject(message);
 					outputStreamToOtherClients.flush();
 				}else{
 					//其余用户设定为旁观者
 					message.setRole((byte)3);
 					message.setData(data);
+					message.setPics(pics);
 					outputStreamToOtherClients.writeObject(message);
 					outputStreamToOtherClients.flush();
 				}
@@ -135,7 +144,7 @@ public class Server {
 					//不管收到什么消息，负责直接转发
 					Message myMessage=(Message) inputStreamFromClient.readObject();//接收到红方的消息
 					//Message myMessage=getLastMessage(inputStreamFromClient);
-					JOptionPane.showMessageDialog(null, ((DataMessage) myMessage).getPrerow()+","+((DataMessage) myMessage).getPrecol()+","+((DataMessage) myMessage).getRow()+","+((DataMessage) myMessage).getCol()+","+current_socket.getRemoteSocketAddress());
+					//JOptionPane.showMessageDialog(null, ((DataMessage) myMessage).getPrerow()+","+((DataMessage) myMessage).getPrecol()+","+((DataMessage) myMessage).getRow()+","+((DataMessage) myMessage).getCol()+","+current_socket.getRemoteSocketAddress());
 					if(myMessage instanceof DataMessage){
 						((DataMessage) myMessage).setData(data);
 						((DataMessage) myMessage).changeArray();
@@ -162,19 +171,6 @@ public class Server {
 					e.printStackTrace();
 				}
 			}
-		}
-	}
-	
-	public Message getLastMessage(ObjectInputStream inputStream) throws ClassNotFoundException, IOException {
-		Message message=null;
-		try{
-			while(true){
-				message=(Message) inputStream.readObject();
-				System.out.println(message);
-			}
-		}catch(EOFException e){
-			System.out.println("完成");
-			return message;
 		}
 	}
 	

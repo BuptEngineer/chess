@@ -39,16 +39,14 @@ public class ChessBoard extends JPanel implements MouseListener,Runnable{
 	private boolean isRedo;//是否悔棋
 	private byte state=0;//状态0表示空闲, 1表示准备,2表示游戏开始,3表示游戏进行中,4表示游戏结束
 	
-	public ChessBoard(Image[] pics) {
+	public ChessBoard(Image[] pictures) {
 		// TODO Auto-generated constructor stub
-		this.pics=pics;
-		
-		
+		pics=pictures;
 		internet=new Internet();//开启数据服务器，至于消息服务器需要手动提前开启
 		//判断角色和获取棋局初始状态
 		//message=new DataMessage();//实例化数据消息，一方面保存本类的全局属性，同时又可以作为消息发送出去
 		message= (DataMessage) internet.readMessage();//给出状态
-		data=message.data;
+		data=message.getData();
 //		message.setCode(Code.Free);//状态是空闲
 //		message.setRole(normalMessage.getRole());//设置当前角色，是红方还是黑方，还是旁观者
 //		message.setYourTurn(normalMessage.isYourTurn());//设置先后手
@@ -355,7 +353,12 @@ public class ChessBoard extends JPanel implements MouseListener,Runnable{
 			//到此，表明移动的步符合走棋规则、而且没有送将、以及游戏没有结束
 			//internet.writeMessage(prerow+" "+precol+" "+row+" "+col);//向服务器写消息
 			data=datasub;
-			internet.writeMessage(message);//发送构造的消息
+			try {
+				internet.writeMessage(message.clone());
+			} catch (CloneNotSupportedException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}//发送构造的消息
 			isSelected=false;//被选中为false，这样下阶段是选择棋子，而不是移动棋子
 			message.setYourTurn(!message.isYourTurn());//回合切换
 			tip=false;
