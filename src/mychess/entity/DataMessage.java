@@ -1,7 +1,6 @@
 package mychess.entity;
 
 import java.io.Serializable;
-
 /**
  * 客户端传送到服务端的数据消息
  * 2019年1月3日 下午10:07:45

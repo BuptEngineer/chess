@@ -46,7 +46,6 @@ public class Server {
 		//new Redo();
 		ServerSocket socket;
 		clients=new ArrayList<Socket>();//已经连接的客户端
-		withdraw=new Withdraw();
 		try{
 			//创建Socket
 			socket=new ServerSocket(Integer.parseInt(ReadProperties.PORT));
@@ -77,6 +76,8 @@ public class Server {
 			{0,0,0,0,0,0,0,0,0},
 			{1,2,3,4,5,4,3,2,1}
 		};
+		
+		withdraw=new Withdraw();
 	}
 
 	/**
@@ -151,8 +152,12 @@ public class Server {
 							myMessage=(DataMessage) withdraw.getLast();
 							myMessage.setValid(false);//发给所有人
 							data=Common.String_to_Array(((DataMessage)myMessage).getData());//撤销后的棋局
+						}else if(((NormalMessage) myMessage).getAttach().equals("游戏结束")){
+							//收到该socket的通知,那么该socket是胜利方
+							myMessage.setValid(false);//发给所有人
 						}
 					}
+					myMessage.setStep(withdraw.allSteps());//加上步数
 					for(Socket s:clients){
 						if(s==current_socket && myMessage.isValid()) continue;//如果valid为false表明发给任何人
 						outputStreamToOtherClients=new MyObjectOutputStream(s.getOutputStream());//

@@ -275,20 +275,6 @@ public class ChessBoard extends JPanel implements MouseListener,Runnable{
 			message.setEatedChess(datasub[message.getRow()-1][message.getCol()-1]);//设置被吃掉的子
 			datasub[message.getRow()-1][message.getCol()-1]=datasub[message.getPrerow()-1][message.getPrecol()-1];
 			datasub[message.getPrerow()-1][message.getPrecol()-1]=0;
-			
-			//判断试探性走棋是否到达游戏结束状态
-			if(new HasFinished(datasub).isFinished(message.getRole()==1)){//游戏结束
-				data=datasub;//将当前棋局置为试探性走棋后的棋局
-				tip=false;
-				repaint();
-				NormalMessage myNormalMessage=new NormalMessage();//创建一般消息
-				myNormalMessage.setAttach("很遗憾你输了");
-				internet.writeMessage(myNormalMessage);
-				message.setCode(Code.Over);
-				System.out.println("游戏结束");
-				return;
-			}
-			
 			if(!HasFinished.jiangTip(datasub, message.getRole()==1)){//当前被将军了，不能送将
 				if(message.getRole()==2)
 					message.setPrerow(11-message.getPrerow());
@@ -299,11 +285,22 @@ public class ChessBoard extends JPanel implements MouseListener,Runnable{
 			//到此，表明移动的步符合走棋规则、而且没有送将、以及游戏没有结束
 			data=datasub;
 			try {
+				message.setStep(message.getStep()+1);
 				internet.writeMessage(message.clone());
 			} catch (CloneNotSupportedException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}//发送构造的消息
+			
+			//判断试探性走棋是否到达游戏结束状态
+			if(new HasFinished(data).isFinished(message.getRole()==1)){//游戏结束
+				NormalMessage myNormalMessage=new NormalMessage();//创建一般消息
+				myNormalMessage.setRole(message.getRole());
+				myNormalMessage.setAttach("游戏结束");
+				internet.writeMessage(myNormalMessage);
+				message.setCode(Code.Over);
+			}
+			
 			isSelected=false;//被选中为false，这样下阶段是选择棋子，而不是移动棋子
 			message.setYourTurn(!message.isYourTurn());//回合切换
 			tip=false;
@@ -378,6 +375,16 @@ public class ChessBoard extends JPanel implements MouseListener,Runnable{
 						temp.setAttach("对方不同意悔棋");
 						internet.writeMessage(temp);
 					}
+				}else if(((NormalMessage) myMessage).getAttach().equals("游戏结束")){
+					//TODO 弹出胜负对话框,标题是胜负
+					if(message.getRole()==myMessage.getRole()){
+						//自己发给自己的，属于胜利方
+						JOptionPane.showMessageDialog(null, "恭喜,获得胜利");
+					}else if(message.getRole()<=2){
+						JOptionPane.showMessageDialog(null, "遗憾,没有胜利");
+					}else{
+						JOptionPane.showMessageDialog(null, "此局游戏,"+(myMessage.getRole()==1?"红方":"黑方"+"获得胜利"));
+					}
 				}
 				if(filterMessage(myMessage))
 					JOptionPane.showMessageDialog(null, ((NormalMessage) myMessage).getAttach());
@@ -388,6 +395,8 @@ public class ChessBoard extends JPanel implements MouseListener,Runnable{
 			message.setPrecol(((DataMessage) myMessage).getPrecol());
 			message.setRow(((DataMessage) myMessage).getRow());
 			message.setCol(((DataMessage) myMessage).getCol());
+			message.setStep(myMessage.getStep());
+			
 			if(message.getRole()==2){
 				message.setPrerow(11-message.getPrerow());
 				message.setRow(11-message.getRow());
@@ -420,6 +429,14 @@ public class ChessBoard extends JPanel implements MouseListener,Runnable{
 	public void Redo() {
 		//执行悔棋
 		//向服务器写悔棋请求数据
+		if(message.isYourTurn()){
+			JOptionPane.showMessageDialog(null, "到你走棋了,不能悔棋");
+			return;
+		}
+		if(message.getStep()==1){
+			JOptionPane.showMessageDialog(null, "当前是第一步，不能悔棋");
+			return;
+		}
 		NormalMessage message=new NormalMessage();
 		message.setAttach("悔棋");
 		internet.writeMessage(message);
@@ -427,7 +444,8 @@ public class ChessBoard extends JPanel implements MouseListener,Runnable{
 	
 	public boolean filterMessage(Message message) {
 		//过滤消息
-		if(((NormalMessage)message).getAttach().equals("悔棋"))
+		if(((NormalMessage)message).getAttach().equals("悔棋") || 
+				((NormalMessage)message).getAttach().equals("游戏结束"))
 			return false;
 		return true;
 	}
