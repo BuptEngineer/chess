@@ -18,16 +18,19 @@ import mychess.util.Common;
 import mychess.util.HasFinished;
 import mychess.util.JudgeMove;
 
-
 public class ChessBoard extends JPanel implements MouseListener,Runnable{
 	/** serialVersionUID*/
 	private static final long serialVersionUID = 1L;
-	private DataMessage message;//每次准备一个消息报文，准备消息通信
-	private boolean tip;//是否重绘的时候加上提示（也就是走棋的时候有标记）
-	private boolean isSelected;//棋子是否被选中，决定下一步点击是移动棋子还是在选择棋子
-	private int[][] data;//当前棋局的状态数组,用于重绘
-	private Image[] pics;//加载象棋的图片
+	protected DataMessage message;//每次准备一个消息报文，准备消息通信
+	protected boolean tip;//是否重绘的时候加上提示（也就是走棋的时候有标记）
+	protected boolean isSelected;//棋子是否被选中，决定下一步点击是移动棋子还是在选择棋子
+	protected int[][] data;//当前棋局的状态数组,用于重绘
+	protected Image[] pics;//加载象棋的图片
 	private Internet internet;//数据服务器对象
+	
+	public ChessBoard() {
+		// TODO Auto-generated constructor stub
+	}
 	
 	public ChessBoard(Image[] pictures) {
 		// TODO Auto-generated constructor stub
@@ -39,33 +42,7 @@ public class ChessBoard extends JPanel implements MouseListener,Runnable{
 		Thread t=new Thread(this);//数据服务交互
 		t.start();
 	}
-	
-	private void drawLines(int row,int col,int width,int height,Graphics g) {
-		//1/2 2/3 1/3
-		int baseX=width*col/11;
-		int baseY=height*row/12;
-		int wlen=width/110;
-		int hlen=height/120;
-		int w4len=width/44;
-		int h4len=height/48;
-		
-		if(col!=9){
-			g.drawLine(baseX+wlen, baseY-hlen, baseX+wlen, baseY-h4len);
-			g.drawLine(baseX+wlen, baseY-hlen, baseX+w4len, baseY-hlen);
-		
-			g.drawLine(baseX+wlen, baseY+hlen, baseX+w4len, baseY+hlen);
-			g.drawLine(baseX+wlen, baseY+hlen,baseX+wlen,baseY+h4len);
-		}
-		
-		if(col!=1){
-			g.drawLine(baseX-wlen, baseY-hlen, baseX-wlen,baseY-h4len);
-			g.drawLine(baseX-wlen, baseY-hlen, baseX-w4len, baseY-hlen);
-		
-			g.drawLine(baseX-wlen, baseY+hlen, baseX-w4len, baseY+hlen);
-			g.drawLine(baseX-wlen, baseY+hlen, baseX-wlen, baseY+h4len);
-		}
-	}
-	
+	//绘图
 	@Override
 	protected void paintComponent(Graphics g) {
 		// TODO Auto-generated method stub
@@ -337,19 +314,10 @@ public class ChessBoard extends JPanel implements MouseListener,Runnable{
 	public void mouseEntered(MouseEvent e) {}
 	public void mouseExited(MouseEvent e) {}
 
-	//下面是set和get方法
-	public boolean isSelected() {
-		return isSelected;
-	}
-
 	public void setSelected(boolean isSelected) {
 		this.isSelected = isSelected;
 	}
-
-	public Internet getInternet() {
-		return internet;
-	}
-
+	
 	/**
 	 * 与数据服务器和消息服务器进行交互
 	 */
@@ -410,22 +378,8 @@ public class ChessBoard extends JPanel implements MouseListener,Runnable{
 	}
 	
 	/**
-	 * 这是提取的公共操作，用于在不合理的移动棋子时候能恢复到移动前的坐标状态
-	 * @param aixs是两个位置的坐标数组
+	 * 悔棋功能的实现
 	 */
-	private void common_op(int[] aixs) {
-		if(message.getRole()==1){
-			message.setPrerow(aixs[0]);
-			message.setRow(aixs[0]);
-		}else{
-			message.setPrerow(11-aixs[0]);
-			message.setRow(11-aixs[0]);
-		}
-		message.setPrecol(aixs[1]);
-		message.setCol(aixs[1]);
-		repaint();
-	}
-	
 	public void Redo() {
 		//执行悔棋
 		//向服务器写悔棋请求数据
@@ -442,7 +396,49 @@ public class ChessBoard extends JPanel implements MouseListener,Runnable{
 		internet.writeMessage(message);
 	}
 	
-	public boolean filterMessage(Message message) {
+	//绘图的公共操作,绘制棋盘中的米字
+	private void drawLines(int row,int col,int width,int height,Graphics g) {
+		//1/2 2/3 1/3
+		int baseX=width*col/11;
+		int baseY=height*row/12;
+		int wlen=width/110;
+		int hlen=height/120;
+		int w4len=width/44;
+		int h4len=height/48;
+		
+		if(col!=9){
+			g.drawLine(baseX+wlen, baseY-hlen, baseX+wlen, baseY-h4len);
+			g.drawLine(baseX+wlen, baseY-hlen, baseX+w4len, baseY-hlen);
+		
+			g.drawLine(baseX+wlen, baseY+hlen, baseX+w4len, baseY+hlen);
+			g.drawLine(baseX+wlen, baseY+hlen,baseX+wlen,baseY+h4len);
+		}
+		
+		if(col!=1){
+			g.drawLine(baseX-wlen, baseY-hlen, baseX-wlen,baseY-h4len);
+			g.drawLine(baseX-wlen, baseY-hlen, baseX-w4len, baseY-hlen);
+		
+			g.drawLine(baseX-wlen, baseY+hlen, baseX-w4len, baseY+hlen);
+			g.drawLine(baseX-wlen, baseY+hlen, baseX-wlen, baseY+h4len);
+		}
+	}
+	
+	//用于在不合理的移动棋子时候能恢复到移动前的坐标状态
+	protected void common_op(int[] aixs) {
+		if(message.getRole()==1){
+			message.setPrerow(aixs[0]);
+			message.setRow(aixs[0]);
+		}else{
+			message.setPrerow(11-aixs[0]);
+			message.setRow(11-aixs[0]);
+		}
+		message.setPrecol(aixs[1]);
+		message.setCol(aixs[1]);
+		repaint();
+	}
+	
+	//过滤一些消息，使其不显示
+	private boolean filterMessage(Message message) {
 		//过滤消息
 		if(((NormalMessage)message).getAttach().equals("悔棋") || 
 				((NormalMessage)message).getAttach().equals("游戏结束"))

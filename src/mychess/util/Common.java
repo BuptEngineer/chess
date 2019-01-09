@@ -4,6 +4,9 @@ package mychess.util;
  * 这是工具类中公共部分
  */
 public class Common {
+	public static int MODE;//游戏模式,1表示单机模式,2表示联网模式,3表示人机模式,4表示机机模式
+	
+	public static boolean isRed;//单机是否为红方
 	/**
 	 * 备份当前棋局数组，可以使用clone代替
 	 * @param data是当前棋局
@@ -48,23 +51,12 @@ public class Common {
 		}
 		return temp;
 	}
-	
-	/**
-	 * 这是对于两个给的数组，发现其中不同的点，将不同点转化为两对坐标组成数组
-	 * @param
-	 */
-	public static int[] FindDiff(int[][] data1,int[][] data2,boolean isRed) {//可优化
-		int[] aixs=new int[5];
-		for(int i=0;i<data1.length;i++)
-			for(int j=0;j<data1[i].length;j++)
-				if(data1[i][j]!=data2[i][j])
-					if(data2[i][j]==0){
-						aixs[0]=i+1;
-						aixs[1]=j+1;
-					}else{
-						aixs[2]=i+1;
-						aixs[3]=j+1;
-					}
-		return aixs;
+
+	public static int getMODE() {
+		return MODE;
+	}
+
+	public static void setMODE(int mODE) {
+		MODE = mODE;
 	}
 }

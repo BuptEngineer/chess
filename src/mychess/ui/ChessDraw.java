@@ -38,7 +38,7 @@ public class ChessDraw extends JFrame{
 		pics[12]=Toolkit.getDefaultToolkit().getImage("images/½«.png");
 		pics[13]=Toolkit.getDefaultToolkit().getImage("images/ÅÚ2.png");
 		pics[14]=Toolkit.getDefaultToolkit().getImage("images/×ä.png");
-		final ChessBoard panel=new ChessBoard(pics);
+		final ChessBoard panel=new StandAloneChessBoard(pics);
 		add(panel,BorderLayout.CENTER);
 		JPanel panel2=new JPanel();
 		panel2.add(restart);

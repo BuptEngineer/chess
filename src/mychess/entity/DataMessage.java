@@ -77,10 +77,4 @@ public class DataMessage extends Message implements Serializable{
 	public String getData() {
 		return data;
 	}
-	
-	public void resever() {
-		//·´×ªÐÐ
-		prerow=11-prerow;
-		precol=11-precol;
-	}
 }

@@ -10,6 +10,10 @@ public class ReadProperties {
 	
 	public static String PORT;
 	
+	public static Boolean YOURTURN;
+	
+	public static String DEPTH;
+	
 	public static void read() {
 		// TODO Auto-generated constructor stub
 		Properties properties=new Properties();
@@ -30,5 +34,7 @@ public class ReadProperties {
 		}
 		IP=properties.getProperty("chess.ip");
 		PORT=properties.getProperty("chess.port");
+		YOURTURN=Boolean.parseBoolean(properties.getProperty("chess.yourTurn"));
+		DEPTH=properties.getProperty("chess.depth");
 	}
 }

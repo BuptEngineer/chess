@@ -32,7 +32,7 @@ public class HasFinished {
 			return true;
 		}
 		//无棋可走
-		List<List<int[]>> all=all_move(isRed);
+		List<List<int[]>> all=all_move(Common.Backup(data),isRed);
 		for(int i=0;i<all.size();i++){
 			for(int j=0;j<all.get(i).size();j++){
 				int[] current=all.get(i).get(j);
@@ -52,15 +52,15 @@ public class HasFinished {
 	 * @param isRed是当前角色,
 	 * 			返回的是List的List,里面的List是对于每个标签的所有移动坐标集合，外面的List是所有标签的移动集合
 	 */
-	private List<List<int[]>> all_move(boolean isRed) {// 红方或者蓝方此时能动的所有子
+	public static List<List<int[]>> all_move(int[][] datasub,boolean isRed) {// 红方或者蓝方此时能动的所有子
 		List<List<int[]>> all = new ArrayList<>();
 		CanMove cm = new CanMove();
-		int[][] datasub = Common.Backup(data);
+		//int[][] datasub = Common.Backup(data);
 		for (int i = 0; i < datasub.length; i++) {
 			for (int j = 0; j < datasub[i].length; j++) {
 				if ((!isRed && datasub[i][j] > 7) ||
 						(isRed && datasub[i][j]<=7))
-					continue;// 该子不是自己的
+					continue;// 该子不是自己的,因为当前方执行完到另一方，这里直接考虑到另一方了
 				switch (datasub[i][j]) {
 					case 1:// 车
 					case 8:
