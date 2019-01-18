@@ -3,6 +3,8 @@ package mychess.ui;
 import java.awt.Image;
 import java.awt.event.MouseEvent;
 
+import javax.swing.JOptionPane;
+
 import mychess.entity.Code;
 import mychess.entity.DataMessage;
 import mychess.entity.NormalMessage;
@@ -187,6 +189,9 @@ public class StandAloneChessBoard extends ChessBoard{
 			message.setYourTurn(!message.isYourTurn());
 			data[axis[2]][axis[3]]=data[axis[0]][axis[1]];
 			data[axis[0]][axis[1]]=0;
+			if(new HasFinished(data).isFinished(message.getRole()!=1)){
+				message.setCode(Code.Over);
+			}
 			repaint();
 		}
 	}
