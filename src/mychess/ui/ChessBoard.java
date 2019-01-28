@@ -61,9 +61,9 @@ public class ChessBoard extends JPanel implements MouseListener,Runnable{
 		}
 		
 		//画楚河汉界
-		g.setFont(new Font("华文行楷", Font.BOLD, 30));
-		g.drawString("楚        河", 200, 330);
-		g.drawString("汉        界", 900, 330 );
+//		g.setFont(new Font("华文行楷", Font.BOLD, 30));
+//		g.drawString("楚        河", 200, 330);
+//		g.drawString("汉        界", 900, 330 );
 		
 		//画士的线
 		g.drawLine(width*4/11, height/12, width*6/11, height/4);

@@ -15,7 +15,7 @@ import mychess.script.ReadProperties;
 
 
 //该类实现象棋的图形界面,并负责通信
-public class ChessDraw extends JFrame{
+public class ChessClient extends JFrame{
 
 	private static final long serialVersionUID = 1L;
 	private JButton restart=new JButton("重新开始");
@@ -23,7 +23,7 @@ public class ChessDraw extends JFrame{
 	private JButton cancel=new JButton("悔棋");
 	private Image[] pics =new Image[15];//加载象棋图片
 
-	public ChessDraw() {
+	public ChessClient() {
 		pics[1]=Toolkit.getDefaultToolkit().getImage("images/车1.png");
 		pics[2]=Toolkit.getDefaultToolkit().getImage("images/马1.png");
 		pics[3]=Toolkit.getDefaultToolkit().getImage("images/相1.png");
@@ -38,7 +38,7 @@ public class ChessDraw extends JFrame{
 		pics[12]=Toolkit.getDefaultToolkit().getImage("images/将.png");
 		pics[13]=Toolkit.getDefaultToolkit().getImage("images/炮2.png");
 		pics[14]=Toolkit.getDefaultToolkit().getImage("images/卒.png");
-		final ChessBoard panel=new StandAloneChessBoard(pics);
+		final ChessBoard panel=new ChessBoard(pics);
 		add(panel,BorderLayout.CENTER);
 		JPanel panel2=new JPanel();
 		panel2.add(restart);
@@ -64,9 +64,10 @@ public class ChessDraw extends JFrame{
 	
 	public static void main(String[] args) {
 		ReadProperties.read();//读取配置文件
-		JFrame frame=new ChessDraw();
+		JFrame frame=new ChessClient();
 		frame.setTitle("象棋");
-		frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+		frame.setSize(1000,800);
+//		frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
