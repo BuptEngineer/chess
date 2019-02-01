@@ -66,7 +66,7 @@ public class ChessClient extends JFrame{
 		ReadProperties.read();//读取配置文件
 		JFrame frame=new ChessClient();
 		frame.setTitle("象棋");
-		frame.setSize(1000,800);
+		frame.setSize(900,700);
 //		frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLocationRelativeTo(null);
