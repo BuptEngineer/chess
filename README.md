@@ -5,4 +5,4 @@
 3.mychess.entity.Server为服务器，该服务器的ip和port在conf/chess.properties指定
 	mychess.client.ChessClient为客户端，打开两个此界面对弈
 	
-All rights reversed by BUPTEngineer
+All rights reserved by BUPTEngineer
