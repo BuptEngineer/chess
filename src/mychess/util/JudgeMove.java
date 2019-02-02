@@ -1,6 +1,6 @@
 package mychess.util;
 
-import mychess.ui.ChessBoard;
+import mychess.client.ChessBoard;
 
 /**
  * 移动规则类

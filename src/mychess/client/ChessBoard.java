@@ -1,4 +1,4 @@
-package mychess.ui;
+package mychess.client;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -13,9 +13,9 @@ import mychess.entity.Code;
 import mychess.entity.DataMessage;
 import mychess.entity.Message;
 import mychess.entity.NormalMessage;
-import mychess.function.Internet;
 import mychess.util.Common;
 import mychess.util.HasFinished;
+import mychess.util.Internet;
 import mychess.util.JudgeMove;
 
 public class ChessBoard extends JPanel implements MouseListener,Runnable{
@@ -27,7 +27,7 @@ public class ChessBoard extends JPanel implements MouseListener,Runnable{
 	protected int[][] data;//当前棋局的状态数组,用于重绘
 	protected Image[] pics;//加载象棋的图片
 	private Internet internet;//数据服务器对象
-	
+	private String result="";
 	public ChessBoard() {
 		// TODO Auto-generated constructor stub
 	}
@@ -35,13 +35,18 @@ public class ChessBoard extends JPanel implements MouseListener,Runnable{
 	public ChessBoard(Image[] pictures) {
 		// TODO Auto-generated constructor stub
 		pics=pictures;
-		internet=new Internet();//开启数据服务器，至于消息服务器需要手动提前开启
-		message= (DataMessage) internet.readMessage();
-		data=Common.String_to_Array(message.getData());
+		init();
 		addMouseListener(this);//监听鼠标操作
 		Thread t=new Thread(this);//数据服务交互
 		t.start();
 	}
+	
+	public void init() {
+		internet=new Internet();//开启数据服务器，至于消息服务器需要手动提前开启
+		message= (DataMessage) internet.readMessage();
+		data=Common.String_to_Array(message.getData());
+	}
+	
 	//绘图
 	@Override
 	protected void paintComponent(Graphics g) {
@@ -61,10 +66,12 @@ public class ChessBoard extends JPanel implements MouseListener,Runnable{
 		}
 		
 		//画楚河汉界
-//		g.setFont(new Font("华文行楷", Font.BOLD, 30));
-//		g.drawString("楚        河", 200, 330);
-//		g.drawString("汉        界", 900, 330 );
-		
+		g.setFont(new Font("华文行楷", Font.BOLD, 25));
+		g.drawString("楚        河", (int)(width*1.5/11), (int)(height*(4.6+1)/12));
+		g.drawString("汉        界", (int)(width*7.1/11), (int)(height*(4.6+1)/12));
+		g.setColor(Color.RED);
+		g.drawString(result,(int)(width*4/11), (int)(height*(4.6+1)/12));
+		g.setColor(Color.BLACK);
 		//画士的线
 		g.drawLine(width*4/11, height/12, width*6/11, height/4);
 		g.drawLine(width*6/11, height/12, width*4/11, height/4);
@@ -105,7 +112,7 @@ public class ChessBoard extends JPanel implements MouseListener,Runnable{
 		int prerow=message.getPrerow();
 		int col=message.getCol();
 		int row=message.getRow();
-		if((message.isYourTurn() || message.getRole()>2) && message.getCode()==Code.Run){//或者是旁观者
+		if((message.isYourTurn() || message.getRole()>2) && message.getCode()==Code.Run && row!=0){//或者是旁观者
 			//画对方的提示
 			g.setColor(Color.GREEN);
 			g.drawLine(precol*width/11-width/22, prerow*height/12-height/24, precol*width/11-width/44, prerow*height/12-height/24);
@@ -344,15 +351,53 @@ public class ChessBoard extends JPanel implements MouseListener,Runnable{
 						internet.writeMessage(temp);
 					}
 				}else if(((NormalMessage) myMessage).getAttach().equals("游戏结束")){
-					//TODO 弹出胜负对话框,标题是胜负
-					if(message.getRole()==myMessage.getRole()){
-						//自己发给自己的，属于胜利方
-						JOptionPane.showMessageDialog(null, "恭喜,获得胜利");
-					}else if(message.getRole()<=2){
-						JOptionPane.showMessageDialog(null, "遗憾,没有胜利");
-					}else{
-						JOptionPane.showMessageDialog(null, "此局游戏,"+(myMessage.getRole()==1?"红方":"黑方"+"获得胜利"));
+					String role=myMessage.getRole()==1?"红方":"黑方";
+					result=role+"胜利";
+					message.setCode(Code.Over);
+					repaint();
+				}else if(((NormalMessage)myMessage).getAttach().equals("重新开局")){
+					int showConfirmDialog = JOptionPane.showConfirmDialog(null, "对方请求再来一局，是否同意");
+					if(message.getRole()>2) continue;//同意重新开始
+					if(showConfirmDialog==JOptionPane.YES_OPTION){
+						//发个同意的消息
+						NormalMessage temp=new NormalMessage();
+						temp.setAttach("同意开局");
+						internet.writeMessage(temp);
+					}else if(showConfirmDialog==JOptionPane.NO_OPTION){
+						//不同意悔棋
+						NormalMessage temp=new NormalMessage();
+						temp.setAttach("对方不同意开局");
+						internet.writeMessage(temp);
 					}
+				}else if(((NormalMessage)myMessage).getAttach().equals("同意开局")){
+					//将自己的最初数据包发给对方
+					init();
+					result="";
+					repaint();
+				}else if(((NormalMessage)myMessage).getAttach().contains("认输")){
+					result=message.getRole()==1?"红方获胜":"黑方获胜";
+					message.setCode(Code.Over);
+					repaint();
+				}else if(((NormalMessage)myMessage).getAttach().equals("求和")){
+					int showConfirmDialog = JOptionPane.showConfirmDialog(null, "对方请求求和，是否同意");
+					if(showConfirmDialog==JOptionPane.YES_OPTION){
+						//发个同意的消息
+						NormalMessage temp=new NormalMessage();
+						temp.setAttach("同意求和");
+						internet.writeMessage(temp);
+					}else if(showConfirmDialog==JOptionPane.NO_OPTION){
+						//不同意悔棋
+						NormalMessage temp=new NormalMessage();
+						temp.setAttach("对方不同意求和");
+						internet.writeMessage(temp);
+					}
+				}else if(((NormalMessage)myMessage).getAttach().equals("同意求和")){
+					result="双方议和";
+					message.setCode(Code.Over);
+					repaint();
+				}else if(((NormalMessage)myMessage).getAttach().equals("离开")){
+					JOptionPane.showMessageDialog(null, "对方已经离开,即将退出");
+					System.exit(1);
 				}
 				if(filterMessage(myMessage))
 					JOptionPane.showMessageDialog(null, ((NormalMessage) myMessage).getAttach());
@@ -393,6 +438,51 @@ public class ChessBoard extends JPanel implements MouseListener,Runnable{
 		}
 		NormalMessage message=new NormalMessage();
 		message.setAttach("悔棋");
+		internet.writeMessage(message);
+	}
+	
+	/**
+	 * 重新开始的实现
+	 */
+	public void restart() {
+		if(message.getCode().getDes().equals("结束")){
+			//游戏已经结束，可以重新开始
+			NormalMessage message=new NormalMessage();
+			message.setAttach("重新开局");
+			message.setRole(message.getRole());
+			internet.writeMessage(message);
+		}else{
+			JOptionPane.showMessageDialog(null, "游戏没有结束,请继续走棋");
+			return;
+		}
+	}
+	
+	public void lose() {
+		if(message.getStep()<20){
+			JOptionPane.showMessageDialog(null, "二十步之内不能认输");
+			return;
+		}
+		result=message.getRole()==1?"黑方胜利":"红方胜利";
+		NormalMessage myMessage=new NormalMessage();
+		myMessage.setAttach((message.getRole()==1?"红方":"黑方")+"认输");
+		internet.writeMessage(myMessage);
+		message.setCode(Code.Over);
+		repaint();
+	}
+	
+	public void peace() {
+		if(message.getStep()<50){
+			JOptionPane.showMessageDialog(null, "五十步之内不能求和");
+			return;
+		}
+		NormalMessage message=new NormalMessage();
+		message.setAttach("求和");
+		internet.writeMessage(message);
+	}
+	
+	public void leave() {
+		NormalMessage message=new NormalMessage();
+		message.setAttach("离开");
 		internet.writeMessage(message);
 	}
 	
@@ -441,7 +531,8 @@ public class ChessBoard extends JPanel implements MouseListener,Runnable{
 	private boolean filterMessage(Message message) {
 		//过滤消息
 		if(((NormalMessage)message).getAttach().equals("悔棋") || 
-				((NormalMessage)message).getAttach().equals("游戏结束"))
+				((NormalMessage)message).getAttach().equals("游戏结束") || ((NormalMessage)message).getAttach().equals("同意开局")
+				|| ((NormalMessage)message).getAttach().equals("求和") || ((NormalMessage)message).getAttach().equals("同意求和"))
 			return false;
 		return true;
 	}

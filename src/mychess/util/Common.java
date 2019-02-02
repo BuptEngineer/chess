@@ -20,7 +20,7 @@ public class Common {
 		}
 		return sub;
 	}
-	
+
 	/**
 	 * 将字符串转换为数组
 	 * @param temp是给的字符串
