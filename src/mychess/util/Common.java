@@ -1,29 +1,29 @@
 package mychess.util;
 
 /**
- * ÕâÊÇ¹¤¾ßÀàÖĞ¹«¹²²¿·Ö
+ * è¿™æ˜¯å·¥å…·ç±»ä¸­å…¬å…±éƒ¨åˆ†
  */
 public class Common {
-	public static int MODE;//ÓÎÏ·Ä£Ê½,1±íÊ¾µ¥»úÄ£Ê½,2±íÊ¾ÁªÍøÄ£Ê½,3±íÊ¾ÈË»úÄ£Ê½,4±íÊ¾»ú»úÄ£Ê½
+	public static int MODE;//æ¸¸æˆæ¨¡å¼,1è¡¨ç¤ºå•æœºæ¨¡å¼,2è¡¨ç¤ºè”ç½‘æ¨¡å¼,3è¡¨ç¤ºäººæœºæ¨¡å¼,4è¡¨ç¤ºæœºæœºæ¨¡å¼
 	
-	public static boolean isRed;//µ¥»úÊÇ·ñÎªºì·½
+	public static boolean isRed;//å•æœºæ˜¯å¦ä¸ºçº¢æ–¹
 	/**
-	 * ±¸·İµ±Ç°Æå¾ÖÊı×é£¬¿ÉÒÔÊ¹ÓÃclone´úÌæ
-	 * @param dataÊÇµ±Ç°Æå¾Ö
+	 * å¤‡ä»½å½“å‰æ£‹å±€æ•°ç»„ï¼Œå¯ä»¥ä½¿ç”¨cloneä»£æ›¿
+	 * @param dataæ˜¯å½“å‰æ£‹å±€
 	 */
 	public static int[][] Backup(int[][] data) {
 		int[][] sub=new int[data.length][data[0].length];
 		for(int i=0;i<data.length;i++){
 			for(int j=0;j<data[0].length;j++){
-				sub[i][j]=data[i][j];//Éî¶È¸´ÖÆ
+				sub[i][j]=data[i][j];//æ·±åº¦å¤åˆ¶
 			}
 		}
 		return sub;
 	}
 
 	/**
-	 * ½«×Ö·û´®×ª»»ÎªÊı×é
-	 * @param tempÊÇ¸øµÄ×Ö·û´®
+	 * å°†å­—ç¬¦ä¸²è½¬æ¢ä¸ºæ•°ç»„
+	 * @param tempæ˜¯ç»™çš„å­—ç¬¦ä¸²
 	 */
 	public static int[][] String_to_Array(String temp) {
 		String[] lines=temp.split("\n");
@@ -38,8 +38,8 @@ public class Common {
 	}
 	
 	/**
-	 * ½«Êı×é×ª»»Îª×Ö·û´®
-	 * @param dataÊÇÆå¾ÖÊı×é
+	 * å°†æ•°ç»„è½¬æ¢ä¸ºå­—ç¬¦ä¸²
+	 * @param dataæ˜¯æ£‹å±€æ•°ç»„
 	 */
 	public static String Array_to_String(int[][] data) {
 		String temp="";

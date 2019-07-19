@@ -6,11 +6,11 @@ import java.util.List;
 import mychess.entity.Message;
 
 /**
- * »ÚÆå¹¦ÄÜ
- * 2019Äê1ÔÂ6ÈÕ ÏÂÎç7:52:08
+ * æ‚”æ£‹åŠŸèƒ½
+ * 2019å¹´1æœˆ6æ—¥ ä¸‹åˆ7:52:08
  */
 public class Withdraw {
-	//ÊÕ¼¯Êı¾İ±¨
+	//æ”¶é›†æ•°æ®æŠ¥
 	private List<Message> messages;
 	
 	public Withdraw() {

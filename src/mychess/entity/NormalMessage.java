@@ -3,12 +3,12 @@ package mychess.entity;
 import java.io.Serializable;
 
 /**
- * Ò»°ãÏûÏ¢
- * 2019Äê1ÔÂ3ÈÕ ÏÂÎç10:10:34
+ * ä¸€èˆ¬æ¶ˆæ¯
+ * 2019å¹´1æœˆ3æ—¥ ä¸‹åˆ10:10:34
  */
 public class NormalMessage extends Message implements Serializable{
 	private static final long serialVersionUID = 1L;
-	public String attach;//¸½¼ÓÏûÏ¢
+	public String attach;//é™„åŠ æ¶ˆæ¯
 
 	public String getAttach() {
 		return attach;

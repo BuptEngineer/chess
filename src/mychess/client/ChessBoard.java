@@ -21,12 +21,12 @@ import mychess.util.JudgeMove;
 public class ChessBoard extends JPanel implements MouseListener,Runnable{
 	/** serialVersionUID*/
 	private static final long serialVersionUID = 1L;
-	protected DataMessage message;//Ã¿´Î×¼±¸Ò»¸öÏûÏ¢±¨ÎÄ£¬×¼±¸ÏûÏ¢Í¨ĞÅ
-	protected boolean tip;//ÊÇ·ñÖØ»æµÄÊ±ºò¼ÓÉÏÌáÊ¾£¨Ò²¾ÍÊÇ×ßÆåµÄÊ±ºòÓĞ±ê¼Ç£©
-	protected boolean isSelected;//Æå×ÓÊÇ·ñ±»Ñ¡ÖĞ£¬¾ö¶¨ÏÂÒ»²½µã»÷ÊÇÒÆ¶¯Æå×Ó»¹ÊÇÔÚÑ¡ÔñÆå×Ó
-	protected int[][] data;//µ±Ç°Æå¾ÖµÄ×´Ì¬Êı×é,ÓÃÓÚÖØ»æ
-	protected Image[] pics;//¼ÓÔØÏóÆåµÄÍ¼Æ¬
-	private Internet internet;//Êı¾İ·şÎñÆ÷¶ÔÏó
+	protected DataMessage message;//æ¯æ¬¡å‡†å¤‡ä¸€ä¸ªæ¶ˆæ¯æŠ¥æ–‡ï¼Œå‡†å¤‡æ¶ˆæ¯é€šä¿¡
+	protected boolean tip;//æ˜¯å¦é‡ç»˜çš„æ—¶å€™åŠ ä¸Šæç¤ºï¼ˆä¹Ÿå°±æ˜¯èµ°æ£‹çš„æ—¶å€™æœ‰æ ‡è®°ï¼‰
+	protected boolean isSelected;//æ£‹å­æ˜¯å¦è¢«é€‰ä¸­ï¼Œå†³å®šä¸‹ä¸€æ­¥ç‚¹å‡»æ˜¯ç§»åŠ¨æ£‹å­è¿˜æ˜¯åœ¨é€‰æ‹©æ£‹å­
+	protected int[][] data;//å½“å‰æ£‹å±€çš„çŠ¶æ€æ•°ç»„,ç”¨äºé‡ç»˜
+	protected Image[] pics;//åŠ è½½è±¡æ£‹çš„å›¾ç‰‡
+	private Internet internet;//æ•°æ®æœåŠ¡å™¨å¯¹è±¡
 	private String result="";
 	public ChessBoard() {
 		// TODO Auto-generated constructor stub
@@ -36,25 +36,25 @@ public class ChessBoard extends JPanel implements MouseListener,Runnable{
 		// TODO Auto-generated constructor stub
 		pics=pictures;
 		init();
-		addMouseListener(this);//¼àÌıÊó±ê²Ù×÷
-		Thread t=new Thread(this);//Êı¾İ·şÎñ½»»¥
+		addMouseListener(this);//ç›‘å¬é¼ æ ‡æ“ä½œ
+		Thread t=new Thread(this);//æ•°æ®æœåŠ¡äº¤äº’
 		t.start();
 	}
 	
 	public void init() {
-		internet=new Internet();//¿ªÆôÊı¾İ·şÎñÆ÷£¬ÖÁÓÚÏûÏ¢·şÎñÆ÷ĞèÒªÊÖ¶¯ÌáÇ°¿ªÆô
+		internet=new Internet();//å¼€å¯æ•°æ®æœåŠ¡å™¨ï¼Œè‡³äºæ¶ˆæ¯æœåŠ¡å™¨éœ€è¦æ‰‹åŠ¨æå‰å¼€å¯
 		message= (DataMessage) internet.readMessage();
 		data=Common.String_to_Array(message.getData());
 	}
 	
-	//»æÍ¼
+	//ç»˜å›¾
 	@Override
 	protected void paintComponent(Graphics g) {
 		// TODO Auto-generated method stub
 		super.paintComponent(g);
 		int height=getHeight();
 		int width=getWidth();
-		//ÏÈ»­ÊıÏß9¸ö£¬ºáÏß10
+		//å…ˆç”»æ•°çº¿9ä¸ªï¼Œæ¨ªçº¿10
 		g.drawLine(width/11, height/12, width/11, height*10/12);
 		g.drawLine(width*9/11, height/12, width*9/11, height*10/12);
 		for(int i=0;i<7;i++){
@@ -65,14 +65,14 @@ public class ChessBoard extends JPanel implements MouseListener,Runnable{
 			g.drawLine(width/11, height*(i+1)/12, width*9/11, height*(i+1)/12);
 		}
 		
-		//»­³şºÓºº½ç
-		g.setFont(new Font("»ªÎÄĞĞ¿¬", Font.BOLD, 25));
-		g.drawString("³ş        ºÓ", (int)(width*1.5/11), (int)(height*(4.6+1)/12));
-		g.drawString("ºº        ½ç", (int)(width*7.1/11), (int)(height*(4.6+1)/12));
+		//ç”»æ¥šæ²³æ±‰ç•Œ
+		g.setFont(new Font("åæ–‡è¡Œæ¥·", Font.BOLD, 25));
+		g.drawString("æ¥š        æ²³", (int)(width*1.5/11), (int)(height*(4.6+1)/12));
+		g.drawString("æ±‰        ç•Œ", (int)(width*7.1/11), (int)(height*(4.6+1)/12));
 		g.setColor(Color.RED);
 		g.drawString(result,(int)(width*4/11), (int)(height*(4.6+1)/12));
 		g.setColor(Color.BLACK);
-		//»­Ê¿µÄÏß
+		//ç”»å£«çš„çº¿
 		g.drawLine(width*4/11, height/12, width*6/11, height/4);
 		g.drawLine(width*6/11, height/12, width*4/11, height/4);
 		g.drawLine(width*4/11, height*10/12, width*6/11, height*8/12);
@@ -81,7 +81,7 @@ public class ChessBoard extends JPanel implements MouseListener,Runnable{
 		drawLines(3, 2, width, height, g);
 		drawLines(3, 8, width, height, g);
 		drawLines(8, 2, width, height, g);
-		drawLines(8, 8, width, height, g);//ÅÚ
+		drawLines(8, 8, width, height, g);//ç‚®
 		
 		drawLines(4, 1, width, height, g);
 		drawLines(4, 3, width, height, g);
@@ -92,9 +92,9 @@ public class ChessBoard extends JPanel implements MouseListener,Runnable{
 		drawLines(7, 3, width, height, g);
 		drawLines(7, 5, width, height, g);
 		drawLines(7, 7, width, height, g);
-		drawLines(7, 9, width, height, g);//±ø
+		drawLines(7, 9, width, height, g);//å…µ
 		
-		//»­Í¼Ïñ
+		//ç”»å›¾åƒ
 		for(int i=1;i<=10;i++){
 			for(int j=1;j<=9;j++){
 				if(data[i-1][j-1]==0) continue;
@@ -112,8 +112,8 @@ public class ChessBoard extends JPanel implements MouseListener,Runnable{
 		int prerow=message.getPrerow();
 		int col=message.getCol();
 		int row=message.getRow();
-		if((message.isYourTurn() || message.getRole()>2) && message.getCode()==Code.Run && row!=0){//»òÕßÊÇÅÔ¹ÛÕß
-			//»­¶Ô·½µÄÌáÊ¾
+		if((message.isYourTurn() || message.getRole()>2) && message.getCode()==Code.Run && row!=0){//æˆ–è€…æ˜¯æ—è§‚è€…
+			//ç”»å¯¹æ–¹çš„æç¤º
 			g.setColor(Color.GREEN);
 			g.drawLine(precol*width/11-width/22, prerow*height/12-height/24, precol*width/11-width/44, prerow*height/12-height/24);
 			g.drawLine(precol*width/11-width/22, prerow*height/12-height/24, precol*width/11-width/22, prerow*height/12-height/48);
@@ -134,7 +134,7 @@ public class ChessBoard extends JPanel implements MouseListener,Runnable{
 			g.drawLine(col*width/11-width/22, row*height/12+height/24, col*width/11-width/22, row*height/12+height/48);
 			g.setColor(Color.black);
 		}
-		//»­Ò»¸öÌáÊ¾
+		//ç”»ä¸€ä¸ªæç¤º
 		if(tip){
 			g.setColor(Color.green);
 			g.drawLine(col*width/11-width/22, row*height/12-height/24, col*width/11-width/44, row*height/12-height/24);
@@ -149,15 +149,15 @@ public class ChessBoard extends JPanel implements MouseListener,Runnable{
 		}
 	}
 	
-	//Êó±êÊÂ¼ş
+	//é¼ æ ‡äº‹ä»¶
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		// TODO Auto-generated method stub
-		if(!message.isYourTurn() || message.getRole()>2 || message.code.getDes()=="½áÊø") return;//Èç¹û²»ÊÇ×Ô¼º»ØºÏ»òÕß½ÇÉ«ÎªÅÔ¹ÛÕß»òÕßµ±Ç°ÓÎÏ·×´Ì¬ÒÑ¾­½áÊø
-													//ÔòÎŞ·¨µã»÷ÆåÅÌ
-		//È·¶¨Î»ÖÃ£¬»ñÈ¡ÏÖÔÚÆå×ÓµÄÁĞºÍĞĞ
-		//Èç¹ûisSelectedÎª¼Ù£¬ÄÇÃ´Õâ¸öÁĞcolºÍĞĞrow½«ÊÇÏÂ´ÎisSelectedÎªÕæµÄÊ±ºòÖ®Ç°µÄpreColºÍpreRow
-		//Èç¹ûisSelectedÎªÕæ£¬ÄÇÃ´Õâ¸öÁĞcolºÍĞĞrow½«ÊÇÏÖÔÚµÄcolºÍrow
+		if(!message.isYourTurn() || message.getRole()>2 || message.code.getDes()=="ç»“æŸ") return;//å¦‚æœä¸æ˜¯è‡ªå·±å›åˆæˆ–è€…è§’è‰²ä¸ºæ—è§‚è€…æˆ–è€…å½“å‰æ¸¸æˆçŠ¶æ€å·²ç»ç»“æŸ
+													//åˆ™æ— æ³•ç‚¹å‡»æ£‹ç›˜
+		//ç¡®å®šä½ç½®ï¼Œè·å–ç°åœ¨æ£‹å­çš„åˆ—å’Œè¡Œ
+		//å¦‚æœisSelectedä¸ºå‡ï¼Œé‚£ä¹ˆè¿™ä¸ªåˆ—colå’Œè¡Œrowå°†æ˜¯ä¸‹æ¬¡isSelectedä¸ºçœŸçš„æ—¶å€™ä¹‹å‰çš„preColå’ŒpreRow
+		//å¦‚æœisSelectedä¸ºçœŸï¼Œé‚£ä¹ˆè¿™ä¸ªåˆ—colå’Œè¡Œrowå°†æ˜¯ç°åœ¨çš„colå’Œrow
 		int width=getWidth();
 		int height=getHeight();
 		int x=e.getX();
@@ -177,11 +177,11 @@ public class ChessBoard extends JPanel implements MouseListener,Runnable{
 			}
 		}
 		
-		if(isSelected){//Èç¹ûÒÑ¾­Ñ¡ÖĞÁËÆå×Ó£¬½ÓÏÂÀ´¾ÍÊÇÒÆ¶¯Æå×Ó²Ù×÷£¨´ËÊ±ËÄ¸ö×ø±êÒÑ¾­È·¶¨ÁË£©
-			//ÅĞ¶ÏÄÜ²»ÄÜµ½
-			//ÏÈÅĞ¶ÏÊÇ·ñ±»½«¾ü
+		if(isSelected){//å¦‚æœå·²ç»é€‰ä¸­äº†æ£‹å­ï¼Œæ¥ä¸‹æ¥å°±æ˜¯ç§»åŠ¨æ£‹å­æ“ä½œï¼ˆæ­¤æ—¶å››ä¸ªåæ ‡å·²ç»ç¡®å®šäº†ï¼‰
+			//åˆ¤æ–­èƒ½ä¸èƒ½åˆ°
+			//å…ˆåˆ¤æ–­æ˜¯å¦è¢«å°†å†›
 			int[] aixs=new int[4];
-			if(message.getRole()==1){//ºì·½
+			if(message.getRole()==1){//çº¢æ–¹
 				aixs=new int[]{message.getPrerow(),message.getPrecol(),message.getRow(),message.getCol()};
 			}else{
 				aixs=new int[]{11-message.getPrerow(),message.getPrecol(),11-message.getRow(),message.getCol()};
@@ -191,28 +191,28 @@ public class ChessBoard extends JPanel implements MouseListener,Runnable{
 			
 			message.setChess(data[message.getPrerow()-1][message.getPrecol()-1]);
 			
-			JudgeMove jm=new JudgeMove(this,data,message.getRole()==1);//ÒÆ¶¯¹æÔòÅĞ¶Ï¶ÔÏó
+			JudgeMove jm=new JudgeMove(this,data,message.getRole()==1);//ç§»åŠ¨è§„åˆ™åˆ¤æ–­å¯¹è±¡
 			
 			switch (message.getChess()) {
 				case 1:
 				case 8:
-					//ÊÇ³µ
-					if(!jm.move_che(aixs)){//ÒÆ¶¯³µµÄ¹æÔò²»ºÏÀí
-						common_op(aixs);//³·Ïú¡¢»Ö¸´×ø±ê
+					//æ˜¯è½¦
+					if(!jm.move_che(aixs)){//ç§»åŠ¨è½¦çš„è§„åˆ™ä¸åˆç†
+						common_op(aixs);//æ’¤é”€ã€æ¢å¤åæ ‡
 						return;
 					}
 					break;
 				case 2:
 				case 9:
-					//ÊÇÂí
-					if(!jm.move_ma(aixs)){//ÒÆ¶¯ÂíµÄ¹æÔò²»ºÏÀí
+					//æ˜¯é©¬
+					if(!jm.move_ma(aixs)){//ç§»åŠ¨é©¬çš„è§„åˆ™ä¸åˆç†
 						common_op(aixs);
 						return;
 					}
 					break;
 				case 3:
 				case 10:
-					//ÊÇÏà
+					//æ˜¯ç›¸
 					if(!jm.move_xiang(aixs)){
 						common_op(aixs);
 						return;
@@ -220,7 +220,7 @@ public class ChessBoard extends JPanel implements MouseListener,Runnable{
 					break;
 				case 4:
 				case 11:
-					//Ê¿
+					//å£«
 					if(!jm.move_shi(aixs)){
 						common_op(aixs);
 						return;
@@ -228,7 +228,7 @@ public class ChessBoard extends JPanel implements MouseListener,Runnable{
 					break;
 				case 5:
 				case 12:
-					//ÊÇ½«
+					//æ˜¯å°†
 					if(!jm.move_jiang(aixs)){
 						common_op(aixs);
 						return;
@@ -236,7 +236,7 @@ public class ChessBoard extends JPanel implements MouseListener,Runnable{
 					break;
 				case 6:
 				case 13:
-					//ÊÇÅÚ
+					//æ˜¯ç‚®
 					if(!jm.move_pao(aixs)){
 						common_op(aixs);
 						return;
@@ -244,7 +244,7 @@ public class ChessBoard extends JPanel implements MouseListener,Runnable{
 					break;
 				case 7:
 				case 14:
-					//ÊÇ±ø
+					//æ˜¯å…µ
 					if(!jm.move_bing(aixs)){
 						common_op(aixs);
 						return;
@@ -254,19 +254,19 @@ public class ChessBoard extends JPanel implements MouseListener,Runnable{
 					break;
 			}
 			
-			//¿ÉÒÔ½øĞĞÒÆ¶¯
-			int[][] datasub=Common.Backup(data);//ÏÈ±¸·İÆå¾Ö£¬ÏÂÃæ½øĞĞÊÔÌ½ĞÔ×ßÆå
-			message.setEatedChess(datasub[message.getRow()-1][message.getCol()-1]);//ÉèÖÃ±»³ÔµôµÄ×Ó
+			//å¯ä»¥è¿›è¡Œç§»åŠ¨
+			int[][] datasub=Common.Backup(data);//å…ˆå¤‡ä»½æ£‹å±€ï¼Œä¸‹é¢è¿›è¡Œè¯•æ¢æ€§èµ°æ£‹
+			message.setEatedChess(datasub[message.getRow()-1][message.getCol()-1]);//è®¾ç½®è¢«åƒæ‰çš„å­
 			datasub[message.getRow()-1][message.getCol()-1]=datasub[message.getPrerow()-1][message.getPrecol()-1];
 			datasub[message.getPrerow()-1][message.getPrecol()-1]=0;
-			if(!HasFinished.jiangTip(datasub, message.getRole()==1)){//µ±Ç°±»½«¾üÁË£¬²»ÄÜËÍ½«
+			if(!HasFinished.jiangTip(datasub, message.getRole()==1)){//å½“å‰è¢«å°†å†›äº†ï¼Œä¸èƒ½é€å°†
 				if(message.getRole()==2)
 					message.setPrerow(11-message.getPrerow());
 				isSelected=true;
 				return;
-			}//µ±Ç°²½²»ÄÜ×ß
+			}//å½“å‰æ­¥ä¸èƒ½èµ°
 
-			//µ½´Ë£¬±íÃ÷ÒÆ¶¯µÄ²½·ûºÏ×ßÆå¹æÔò¡¢¶øÇÒÃ»ÓĞËÍ½«¡¢ÒÔ¼°ÓÎÏ·Ã»ÓĞ½áÊø
+			//åˆ°æ­¤ï¼Œè¡¨æ˜ç§»åŠ¨çš„æ­¥ç¬¦åˆèµ°æ£‹è§„åˆ™ã€è€Œä¸”æ²¡æœ‰é€å°†ã€ä»¥åŠæ¸¸æˆæ²¡æœ‰ç»“æŸ
 			data=datasub;
 			try {
 				message.setStep(message.getStep()+1);
@@ -274,21 +274,21 @@ public class ChessBoard extends JPanel implements MouseListener,Runnable{
 			} catch (CloneNotSupportedException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
-			}//·¢ËÍ¹¹ÔìµÄÏûÏ¢
+			}//å‘é€æ„é€ çš„æ¶ˆæ¯
 			
-			//ÅĞ¶ÏÊÔÌ½ĞÔ×ßÆåÊÇ·ñµ½´ïÓÎÏ·½áÊø×´Ì¬
-			if(new HasFinished(data).isFinished(message.getRole()==1)){//ÓÎÏ·½áÊø
-				NormalMessage myNormalMessage=new NormalMessage();//´´½¨Ò»°ãÏûÏ¢
+			//åˆ¤æ–­è¯•æ¢æ€§èµ°æ£‹æ˜¯å¦åˆ°è¾¾æ¸¸æˆç»“æŸçŠ¶æ€
+			if(new HasFinished(data).isFinished(message.getRole()==1)){//æ¸¸æˆç»“æŸ
+				NormalMessage myNormalMessage=new NormalMessage();//åˆ›å»ºä¸€èˆ¬æ¶ˆæ¯
 				myNormalMessage.setRole(message.getRole());
-				myNormalMessage.setAttach("ÓÎÏ·½áÊø");
+				myNormalMessage.setAttach("æ¸¸æˆç»“æŸ");
 				internet.writeMessage(myNormalMessage);
 				message.setCode(Code.Over);
 			}
 			
-			isSelected=false;//±»Ñ¡ÖĞÎªfalse£¬ÕâÑùÏÂ½×¶ÎÊÇÑ¡ÔñÆå×Ó£¬¶ø²»ÊÇÒÆ¶¯Æå×Ó
-			message.setYourTurn(!message.isYourTurn());//»ØºÏÇĞ»»
+			isSelected=false;//è¢«é€‰ä¸­ä¸ºfalseï¼Œè¿™æ ·ä¸‹é˜¶æ®µæ˜¯é€‰æ‹©æ£‹å­ï¼Œè€Œä¸æ˜¯ç§»åŠ¨æ£‹å­
+			message.setYourTurn(!message.isYourTurn());//å›åˆåˆ‡æ¢
 			tip=false;
-		}else{//Ñ¡×Ó½×¶Î£¬ÕâÊÇisSelectedÎªfalseµÄÇé¿ö			
+		}else{//é€‰å­é˜¶æ®µï¼Œè¿™æ˜¯isSelectedä¸ºfalseçš„æƒ…å†µ			
 			message.setPrecol(message.getCol());
 			message.setPrerow(message.getRow());
 			if(message.getRole()==2){
@@ -305,9 +305,9 @@ public class ChessBoard extends JPanel implements MouseListener,Runnable{
 				return;
 			}
 			
-			//µ½´ËºÏÀíÑ¡ÔñÁËÆå×Ó
-			tip=true;//¿ªÆôÌáÊ¾¹¦ÄÜ
-			isSelected=true;//ÉèÖÃisSelectedÎªÕæ£¬ÏÂÒ»½×¶ÎÊÇÒÆ¶¯Æå×Ó¶ø²»ÊÇÑ¡ÔñÆå×Ó
+			//åˆ°æ­¤åˆç†é€‰æ‹©äº†æ£‹å­
+			tip=true;//å¼€å¯æç¤ºåŠŸèƒ½
+			isSelected=true;//è®¾ç½®isSelectedä¸ºçœŸï¼Œä¸‹ä¸€é˜¶æ®µæ˜¯ç§»åŠ¨æ£‹å­è€Œä¸æ˜¯é€‰æ‹©æ£‹å­
 			if(message.getRole()==2){
 				message.setPrerow(11-message.getPrerow());
 				message.setRow(11-message.getRow());
@@ -326,7 +326,7 @@ public class ChessBoard extends JPanel implements MouseListener,Runnable{
 	}
 	
 	/**
-	 * ÓëÊı¾İ·şÎñÆ÷ºÍÏûÏ¢·şÎñÆ÷½øĞĞ½»»¥
+	 * ä¸æ•°æ®æœåŠ¡å™¨å’Œæ¶ˆæ¯æœåŠ¡å™¨è¿›è¡Œäº¤äº’
 	 */
 	@Override
 	public void run() {
@@ -335,75 +335,75 @@ public class ChessBoard extends JPanel implements MouseListener,Runnable{
 			Message myMessage=internet.readMessage();
 			message.setCode(Code.Run);
 			if(myMessage instanceof NormalMessage){
-				//Èç¹ûÊÇÏûÏ¢
-				if(((NormalMessage) myMessage).getAttach().equals("»ÚÆå")){
-					int showConfirmDialog = JOptionPane.showConfirmDialog(null, "¶Ô·½ÇëÇó»ÚÆå£¬ÊÇ·ñÍ¬Òâ");
-					if(message.getRole()>2) continue;//ÅÔ¹ÛÕßÇå
+				//å¦‚æœæ˜¯æ¶ˆæ¯
+				if(((NormalMessage) myMessage).getAttach().equals("æ‚”æ£‹")){
+					int showConfirmDialog = JOptionPane.showConfirmDialog(null, "å¯¹æ–¹è¯·æ±‚æ‚”æ£‹ï¼Œæ˜¯å¦åŒæ„");
+					if(message.getRole()>2) continue;//æ—è§‚è€…æ¸…
 					if(showConfirmDialog==JOptionPane.YES_OPTION){
-						//·¢¸öÍ¬ÒâµÄÏûÏ¢
+						//å‘ä¸ªåŒæ„çš„æ¶ˆæ¯
 						NormalMessage temp=new NormalMessage();
-						temp.setAttach("Í¬Òâ»ÚÆå");
+						temp.setAttach("åŒæ„æ‚”æ£‹");
 						internet.writeMessage(temp);
 					}else if(showConfirmDialog==JOptionPane.NO_OPTION){
-						//²»Í¬Òâ»ÚÆå
+						//ä¸åŒæ„æ‚”æ£‹
 						NormalMessage temp=new NormalMessage();
-						temp.setAttach("¶Ô·½²»Í¬Òâ»ÚÆå");
+						temp.setAttach("å¯¹æ–¹ä¸åŒæ„æ‚”æ£‹");
 						internet.writeMessage(temp);
 					}
-				}else if(((NormalMessage) myMessage).getAttach().equals("ÓÎÏ·½áÊø")){
-					String role=myMessage.getRole()==1?"ºì·½":"ºÚ·½";
-					result=role+"Ê¤Àû";
+				}else if(((NormalMessage) myMessage).getAttach().equals("æ¸¸æˆç»“æŸ")){
+					String role=myMessage.getRole()==1?"çº¢æ–¹":"é»‘æ–¹";
+					result=role+"èƒœåˆ©";
 					message.setCode(Code.Over);
 					repaint();
-				}else if(((NormalMessage)myMessage).getAttach().equals("ÖØĞÂ¿ª¾Ö")){
-					int showConfirmDialog = JOptionPane.showConfirmDialog(null, "¶Ô·½ÇëÇóÔÙÀ´Ò»¾Ö£¬ÊÇ·ñÍ¬Òâ");
-					if(message.getRole()>2) continue;//Í¬ÒâÖØĞÂ¿ªÊ¼
+				}else if(((NormalMessage)myMessage).getAttach().equals("é‡æ–°å¼€å±€")){
+					int showConfirmDialog = JOptionPane.showConfirmDialog(null, "å¯¹æ–¹è¯·æ±‚å†æ¥ä¸€å±€ï¼Œæ˜¯å¦åŒæ„");
+					if(message.getRole()>2) continue;//åŒæ„é‡æ–°å¼€å§‹
 					if(showConfirmDialog==JOptionPane.YES_OPTION){
-						//·¢¸öÍ¬ÒâµÄÏûÏ¢
+						//å‘ä¸ªåŒæ„çš„æ¶ˆæ¯
 						NormalMessage temp=new NormalMessage();
-						temp.setAttach("Í¬Òâ¿ª¾Ö");
+						temp.setAttach("åŒæ„å¼€å±€");
 						internet.writeMessage(temp);
 					}else if(showConfirmDialog==JOptionPane.NO_OPTION){
-						//²»Í¬Òâ»ÚÆå
+						//ä¸åŒæ„æ‚”æ£‹
 						NormalMessage temp=new NormalMessage();
-						temp.setAttach("¶Ô·½²»Í¬Òâ¿ª¾Ö");
+						temp.setAttach("å¯¹æ–¹ä¸åŒæ„å¼€å±€");
 						internet.writeMessage(temp);
 					}
-				}else if(((NormalMessage)myMessage).getAttach().equals("Í¬Òâ¿ª¾Ö")){
-					//½«×Ô¼ºµÄ×î³õÊı¾İ°ü·¢¸ø¶Ô·½
+				}else if(((NormalMessage)myMessage).getAttach().equals("åŒæ„å¼€å±€")){
+					//å°†è‡ªå·±çš„æœ€åˆæ•°æ®åŒ…å‘ç»™å¯¹æ–¹
 					init();
 					result="";
 					repaint();
-				}else if(((NormalMessage)myMessage).getAttach().contains("ÈÏÊä")){
-					result=message.getRole()==1?"ºì·½»ñÊ¤":"ºÚ·½»ñÊ¤";
+				}else if(((NormalMessage)myMessage).getAttach().contains("è®¤è¾“")){
+					result=message.getRole()==1?"çº¢æ–¹è·èƒœ":"é»‘æ–¹è·èƒœ";
 					message.setCode(Code.Over);
 					repaint();
-				}else if(((NormalMessage)myMessage).getAttach().equals("ÇóºÍ")){
-					int showConfirmDialog = JOptionPane.showConfirmDialog(null, "¶Ô·½ÇëÇóÇóºÍ£¬ÊÇ·ñÍ¬Òâ");
+				}else if(((NormalMessage)myMessage).getAttach().equals("æ±‚å’Œ")){
+					int showConfirmDialog = JOptionPane.showConfirmDialog(null, "å¯¹æ–¹è¯·æ±‚æ±‚å’Œï¼Œæ˜¯å¦åŒæ„");
 					if(showConfirmDialog==JOptionPane.YES_OPTION){
-						//·¢¸öÍ¬ÒâµÄÏûÏ¢
+						//å‘ä¸ªåŒæ„çš„æ¶ˆæ¯
 						NormalMessage temp=new NormalMessage();
-						temp.setAttach("Í¬ÒâÇóºÍ");
+						temp.setAttach("åŒæ„æ±‚å’Œ");
 						internet.writeMessage(temp);
 					}else if(showConfirmDialog==JOptionPane.NO_OPTION){
-						//²»Í¬Òâ»ÚÆå
+						//ä¸åŒæ„æ‚”æ£‹
 						NormalMessage temp=new NormalMessage();
-						temp.setAttach("¶Ô·½²»Í¬ÒâÇóºÍ");
+						temp.setAttach("å¯¹æ–¹ä¸åŒæ„æ±‚å’Œ");
 						internet.writeMessage(temp);
 					}
-				}else if(((NormalMessage)myMessage).getAttach().equals("Í¬ÒâÇóºÍ")){
-					result="Ë«·½ÒéºÍ";
+				}else if(((NormalMessage)myMessage).getAttach().equals("åŒæ„æ±‚å’Œ")){
+					result="åŒæ–¹è®®å’Œ";
 					message.setCode(Code.Over);
 					repaint();
-				}else if(((NormalMessage)myMessage).getAttach().equals("Àë¿ª")){
-					JOptionPane.showMessageDialog(null, "¶Ô·½ÒÑ¾­Àë¿ª,¼´½«ÍË³ö");
+				}else if(((NormalMessage)myMessage).getAttach().equals("ç¦»å¼€")){
+					JOptionPane.showMessageDialog(null, "å¯¹æ–¹å·²ç»ç¦»å¼€,å³å°†é€€å‡º");
 					System.exit(1);
 				}
 				if(filterMessage(myMessage))
 					JOptionPane.showMessageDialog(null, ((NormalMessage) myMessage).getAttach());
 				continue;
 			}
-			//Èç¹ûÊÇÊı¾İ
+			//å¦‚æœæ˜¯æ•°æ®
 			message.setPrerow(((DataMessage) myMessage).getPrerow());
 			message.setPrecol(((DataMessage) myMessage).getPrecol());
 			message.setRow(((DataMessage) myMessage).getRow());
@@ -423,48 +423,48 @@ public class ChessBoard extends JPanel implements MouseListener,Runnable{
 	}
 	
 	/**
-	 * »ÚÆå¹¦ÄÜµÄÊµÏÖ
+	 * æ‚”æ£‹åŠŸèƒ½çš„å®ç°
 	 */
 	public void Redo() {
-		//Ö´ĞĞ»ÚÆå
-		//Ïò·şÎñÆ÷Ğ´»ÚÆåÇëÇóÊı¾İ
+		//æ‰§è¡Œæ‚”æ£‹
+		//å‘æœåŠ¡å™¨å†™æ‚”æ£‹è¯·æ±‚æ•°æ®
 		if(message.isYourTurn()){
-			JOptionPane.showMessageDialog(null, "µ½Äã×ßÆåÁË,²»ÄÜ»ÚÆå");
+			JOptionPane.showMessageDialog(null, "åˆ°ä½ èµ°æ£‹äº†,ä¸èƒ½æ‚”æ£‹");
 			return;
 		}
 		if(message.getStep()==1){
-			JOptionPane.showMessageDialog(null, "µ±Ç°ÊÇµÚÒ»²½£¬²»ÄÜ»ÚÆå");
+			JOptionPane.showMessageDialog(null, "å½“å‰æ˜¯ç¬¬ä¸€æ­¥ï¼Œä¸èƒ½æ‚”æ£‹");
 			return;
 		}
 		NormalMessage message=new NormalMessage();
-		message.setAttach("»ÚÆå");
+		message.setAttach("æ‚”æ£‹");
 		internet.writeMessage(message);
 	}
 	
 	/**
-	 * ÖØĞÂ¿ªÊ¼µÄÊµÏÖ
+	 * é‡æ–°å¼€å§‹çš„å®ç°
 	 */
 	public void restart() {
-		if(message.getCode().getDes().equals("½áÊø")){
-			//ÓÎÏ·ÒÑ¾­½áÊø£¬¿ÉÒÔÖØĞÂ¿ªÊ¼
+		if(message.getCode().getDes().equals("ç»“æŸ")){
+			//æ¸¸æˆå·²ç»ç»“æŸï¼Œå¯ä»¥é‡æ–°å¼€å§‹
 			NormalMessage message=new NormalMessage();
-			message.setAttach("ÖØĞÂ¿ª¾Ö");
+			message.setAttach("é‡æ–°å¼€å±€");
 			message.setRole(message.getRole());
 			internet.writeMessage(message);
 		}else{
-			JOptionPane.showMessageDialog(null, "ÓÎÏ·Ã»ÓĞ½áÊø,Çë¼ÌĞø×ßÆå");
+			JOptionPane.showMessageDialog(null, "æ¸¸æˆæ²¡æœ‰ç»“æŸ,è¯·ç»§ç»­èµ°æ£‹");
 			return;
 		}
 	}
 	
 	public void lose() {
 		if(message.getStep()<20){
-			JOptionPane.showMessageDialog(null, "¶şÊ®²½Ö®ÄÚ²»ÄÜÈÏÊä");
+			JOptionPane.showMessageDialog(null, "äºŒåæ­¥ä¹‹å†…ä¸èƒ½è®¤è¾“");
 			return;
 		}
-		result=message.getRole()==1?"ºÚ·½Ê¤Àû":"ºì·½Ê¤Àû";
+		result=message.getRole()==1?"é»‘æ–¹èƒœåˆ©":"çº¢æ–¹èƒœåˆ©";
 		NormalMessage myMessage=new NormalMessage();
-		myMessage.setAttach((message.getRole()==1?"ºì·½":"ºÚ·½")+"ÈÏÊä");
+		myMessage.setAttach((message.getRole()==1?"çº¢æ–¹":"é»‘æ–¹")+"è®¤è¾“");
 		internet.writeMessage(myMessage);
 		message.setCode(Code.Over);
 		repaint();
@@ -472,21 +472,21 @@ public class ChessBoard extends JPanel implements MouseListener,Runnable{
 	
 	public void peace() {
 		if(message.getStep()<50){
-			JOptionPane.showMessageDialog(null, "ÎåÊ®²½Ö®ÄÚ²»ÄÜÇóºÍ");
+			JOptionPane.showMessageDialog(null, "äº”åæ­¥ä¹‹å†…ä¸èƒ½æ±‚å’Œ");
 			return;
 		}
 		NormalMessage message=new NormalMessage();
-		message.setAttach("ÇóºÍ");
+		message.setAttach("æ±‚å’Œ");
 		internet.writeMessage(message);
 	}
 	
 	public void leave() {
 		NormalMessage message=new NormalMessage();
-		message.setAttach("Àë¿ª");
+		message.setAttach("ç¦»å¼€");
 		internet.writeMessage(message);
 	}
 	
-	//»æÍ¼µÄ¹«¹²²Ù×÷,»æÖÆÆåÅÌÖĞµÄÃ××Ö
+	//ç»˜å›¾çš„å…¬å…±æ“ä½œ,ç»˜åˆ¶æ£‹ç›˜ä¸­çš„ç±³å­—
 	private void drawLines(int row,int col,int width,int height,Graphics g) {
 		//1/2 2/3 1/3
 		int baseX=width*col/11;
@@ -513,7 +513,7 @@ public class ChessBoard extends JPanel implements MouseListener,Runnable{
 		}
 	}
 	
-	//ÓÃÓÚÔÚ²»ºÏÀíµÄÒÆ¶¯Æå×ÓÊ±ºòÄÜ»Ö¸´µ½ÒÆ¶¯Ç°µÄ×ø±ê×´Ì¬
+	//ç”¨äºåœ¨ä¸åˆç†çš„ç§»åŠ¨æ£‹å­æ—¶å€™èƒ½æ¢å¤åˆ°ç§»åŠ¨å‰çš„åæ ‡çŠ¶æ€
 	protected void common_op(int[] aixs) {
 		if(message.getRole()==1){
 			message.setPrerow(aixs[0]);
@@ -527,12 +527,12 @@ public class ChessBoard extends JPanel implements MouseListener,Runnable{
 		repaint();
 	}
 	
-	//¹ıÂËÒ»Ğ©ÏûÏ¢£¬Ê¹Æä²»ÏÔÊ¾
+	//è¿‡æ»¤ä¸€äº›æ¶ˆæ¯ï¼Œä½¿å…¶ä¸æ˜¾ç¤º
 	private boolean filterMessage(Message message) {
-		//¹ıÂËÏûÏ¢
-		if(((NormalMessage)message).getAttach().equals("»ÚÆå") || 
-				((NormalMessage)message).getAttach().equals("ÓÎÏ·½áÊø") || ((NormalMessage)message).getAttach().equals("Í¬Òâ¿ª¾Ö")
-				|| ((NormalMessage)message).getAttach().equals("ÇóºÍ") || ((NormalMessage)message).getAttach().equals("Í¬ÒâÇóºÍ"))
+		//è¿‡æ»¤æ¶ˆæ¯
+		if(((NormalMessage)message).getAttach().equals("æ‚”æ£‹") || 
+				((NormalMessage)message).getAttach().equals("æ¸¸æˆç»“æŸ") || ((NormalMessage)message).getAttach().equals("åŒæ„å¼€å±€")
+				|| ((NormalMessage)message).getAttach().equals("æ±‚å’Œ") || ((NormalMessage)message).getAttach().equals("åŒæ„æ±‚å’Œ"))
 			return false;
 		return true;
 	}

@@ -5,12 +5,10 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-import javax.swing.JOptionPane;
-
 import mychess.entity.Message;
 
 /**
- * ÓÃÓÚÍøÂçÍ¨ĞÅµÄÀà
+ * ç”¨äºç½‘ç»œé€šä¿¡çš„ç±»
  */
 public class Internet{
 	private Socket socket;
@@ -18,7 +16,7 @@ public class Internet{
 	private ObjectOutputStream outputStreamToServer;
 	
 	/**
-	 * ¶ÔÊı¾İ·şÎñÆ÷½øĞĞÁ¬½Ó
+	 * å¯¹æ•°æ®æœåŠ¡å™¨è¿›è¡Œè¿æ¥
 	 * @param
 	 */
 	public Internet() {
@@ -26,7 +24,7 @@ public class Internet{
 		try {
 			socket=new Socket(ReadProperties.IP, Integer.parseInt(ReadProperties.PORT));
 			outputStreamToServer=new ObjectOutputStream(socket.getOutputStream());
-			inputStreamFromServer=new ObjectInputStream(socket.getInputStream());//×èÈûÖ±µ½¶ÔÃæµÄoutputstream¿ªÆô
+			inputStreamFromServer=new ObjectInputStream(socket.getInputStream());//é˜»å¡ç›´åˆ°å¯¹é¢çš„outputstreamå¼€å¯
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -34,16 +32,16 @@ public class Internet{
 	}
 	
 	/**
-	 * ¸øÊı¾İ·şÎñÆ÷·¢ËÍÏûÏ¢
-	 * @param messageÊÇÒª·¢ËÍ¸øÊı¾İ·şÎñÆ÷µÄ±¾µØÏûÏ¢
+	 * ç»™æ•°æ®æœåŠ¡å™¨å‘é€æ¶ˆæ¯
+	 * @param messageæ˜¯è¦å‘é€ç»™æ•°æ®æœåŠ¡å™¨çš„æœ¬åœ°æ¶ˆæ¯
 	 */
 	public void writeMessage(Message message) {
 		try {
 			outputStreamToServer.writeObject(message);
-			outputStreamToServer.flush();//Çå¿Õ»º´æÇø
+			outputStreamToServer.flush();//æ¸…ç©ºç¼“å­˜åŒº
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			//ÕâÀï´¦ÀíÒì³££¬µ±·şÎñÆ÷µÄÁ÷¹Ø±ÕµÄÊ±ºò´¥·¢¸ÃÒì³£
+			//è¿™é‡Œå¤„ç†å¼‚å¸¸ï¼Œå½“æœåŠ¡å™¨çš„æµå…³é—­çš„æ—¶å€™è§¦å‘è¯¥å¼‚å¸¸
 			try {
 				socket.close();
 				inputStreamFromServer.close();
@@ -57,7 +55,7 @@ public class Internet{
 	}
 	
 	/**
-	 * ´ÓÊı¾İ·şÎñÆ÷¶ÁÏûÏ¢
+	 * ä»æ•°æ®æœåŠ¡å™¨è¯»æ¶ˆæ¯
 	 * @param
 	 */
 	public Message readMessage() {
@@ -66,7 +64,7 @@ public class Internet{
 			message=(Message) inputStreamFromServer.readObject();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			//ÕâÀï´¦ÀíÒì³££¬µ±·şÎñÆ÷µÄÁ÷¹Ø±ÕµÄÊ±ºò´¥·¢¸ÃÒì³£
+			//è¿™é‡Œå¤„ç†å¼‚å¸¸ï¼Œå½“æœåŠ¡å™¨çš„æµå…³é—­çš„æ—¶å€™è§¦å‘è¯¥å¼‚å¸¸
 			try {
 				socket.close();
 				inputStreamFromServer.close();
@@ -75,7 +73,7 @@ public class Internet{
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-			System.exit(1);//·¢ÉúÒì³£ÍË³ö
+			System.exit(1);//å‘ç”Ÿå¼‚å¸¸é€€å‡º
 		}
 		return message;
 	}

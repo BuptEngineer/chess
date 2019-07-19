@@ -19,36 +19,36 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 /**
- * Êı¾İ·şÎñÆ÷Àà
+ * æ•°æ®æœåŠ¡å™¨ç±»
  */
 public class Server {
 	/**
-	 * ËùÓĞÒÑ¾­Á¬½Óµ½±¾·şÎñÆ÷µÄ¿Í»§¶ËÌ×½Ó×Ö£¬±£´æÎªÒ»¸öÁĞ±í
+	 * æ‰€æœ‰å·²ç»è¿æ¥åˆ°æœ¬æœåŠ¡å™¨çš„å®¢æˆ·ç«¯å¥—æ¥å­—ï¼Œä¿å­˜ä¸ºä¸€ä¸ªåˆ—è¡¨
 	 */
 	private List<Socket> clients;
 	
 	/**
-	 * Êı¾İ·şÎñÆ÷µÄÆå¾Ö×´Ì¬<br>
-	 * staticĞŞÊÎ±íÃ÷ÈÎºÎÁ¬½Óµ½±¾·şÎñÆ÷µÄ¿Í»§¶ËÄÜ¹²Ïí¸ÃÊı¾İ<br>
-	 * Õâ¿ÉÒÔÎªÅÔ¹ÛÕßÌá¹©¼°Ê±×¼È·µÄÊı¾İ<br>
+	 * æ•°æ®æœåŠ¡å™¨çš„æ£‹å±€çŠ¶æ€<br>
+	 * staticä¿®é¥°è¡¨æ˜ä»»ä½•è¿æ¥åˆ°æœ¬æœåŠ¡å™¨çš„å®¢æˆ·ç«¯èƒ½å…±äº«è¯¥æ•°æ®<br>
+	 * è¿™å¯ä»¥ä¸ºæ—è§‚è€…æä¾›åŠæ—¶å‡†ç¡®çš„æ•°æ®<br>
 	 */
 	private static int[][] data;
 	
-	private Withdraw withdraw;//³·Ïú¹¦ÄÜ
+	private Withdraw withdraw;//æ’¤é”€åŠŸèƒ½
 	
-	private static int time=1;//¶ÔÕ½´ÎÊı
+	private static int time=1;//å¯¹æˆ˜æ¬¡æ•°
 	/**
-	 * Íê³É³õÊ¼»¯¹¦ÄÜ<br>
-	 * ³õÊ¼»¯Á¬½Ó¿Í»§¶ËµÄÁĞ±í,Æå¾ÖµÄ³õÊ¼×´Ì¬ÉèÖÃ£¬»ÚÆåÁĞ±í£¬ÒÔ¼°ÎªÃ¿¸öÁ¬½ÓµÄ¿Í»§¶ËÒÔµ¥¶ÀÏß³ÌÓëÖ®½»»¥
+	 * å®Œæˆåˆå§‹åŒ–åŠŸèƒ½<br>
+	 * åˆå§‹åŒ–è¿æ¥å®¢æˆ·ç«¯çš„åˆ—è¡¨,æ£‹å±€çš„åˆå§‹çŠ¶æ€è®¾ç½®ï¼Œæ‚”æ£‹åˆ—è¡¨ï¼Œä»¥åŠä¸ºæ¯ä¸ªè¿æ¥çš„å®¢æˆ·ç«¯ä»¥å•ç‹¬çº¿ç¨‹ä¸ä¹‹äº¤äº’
 	 * @param
 	 */
 	public Server() {
 		// TODO Auto-generated constructor stub
 		ServerSocket socket;
-		clients=new ArrayList<Socket>();//ÒÑ¾­Á¬½ÓµÄ¿Í»§¶Ë
+		clients=new ArrayList<Socket>();//å·²ç»è¿æ¥çš„å®¢æˆ·ç«¯
 		init();
 		try{
-			//´´½¨Socket
+			//åˆ›å»ºSocket
 			socket=new ServerSocket(Integer.parseInt(ReadProperties.PORT));
 			while(true){
 				Socket socket_current=socket.accept();
@@ -61,10 +61,10 @@ public class Server {
 		}
 	}
 	
-	//¼ÓÔØÊı¾İ
+	//åŠ è½½æ•°æ®
 	private void init() {
 		// TODO Auto-generated method stub
-		ReadProperties.read();//¶ÁÈ¡ÅäÖÃÎÄ¼ş
+		ReadProperties.read();//è¯»å–é…ç½®æ–‡ä»¶
 		
 		data=new int[][]{{8,9,10,11,12,11,10,9,8},
 			{0,0,0,0,0,0,0,0,0},
@@ -82,17 +82,17 @@ public class Server {
 	}
 
 	/**
-	 * ·şÎñÆ÷Ïß³ÌÀà£¬´¦ÀíÃ¿¸öÁ¬½ÓµÄ¿Í»§¶Ë
+	 * æœåŠ¡å™¨çº¿ç¨‹ç±»ï¼Œå¤„ç†æ¯ä¸ªè¿æ¥çš„å®¢æˆ·ç«¯
 	 */
 	class server_thread implements Runnable{
 		/**
-		 * µ±Ç°Á¬½Ó¿Í»§¶ËµÄÌ×½Ó×Ö
+		 * å½“å‰è¿æ¥å®¢æˆ·ç«¯çš„å¥—æ¥å­—
 		 */
 		Socket current_socket;
 		
 		/**
-		 * ³õÊ¼»¯Ì×½Ó×Ö
-		 * @param socketÊÇµ±Ç°Á¬½ÓµÄÌ×½Ó×Ö
+		 * åˆå§‹åŒ–å¥—æ¥å­—
+		 * @param socketæ˜¯å½“å‰è¿æ¥çš„å¥—æ¥å­—
 		 */
 		public server_thread(Socket socket) {
 			// TODO Auto-generated constructor stub
@@ -100,7 +100,7 @@ public class Server {
 		}
 		
 		/**
-		 * ÓÚµ±Ç°Á¬½ÓµÄÌ×½Ó×Ö£¬·şÎñÆ÷ÓëÖ®½øĞĞ½»»¥
+		 * äºå½“å‰è¿æ¥çš„å¥—æ¥å­—ï¼ŒæœåŠ¡å™¨ä¸ä¹‹è¿›è¡Œäº¤äº’
 		 */
 		@Override
 		public void run() {
@@ -112,7 +112,7 @@ public class Server {
 				inputStreamFromClient=new ObjectInputStream(current_socket.getInputStream());
 				DataMessage message=new DataMessage();
 				if(clients.size()==1){
-					//Ö»ÓĞÒ»¸öÓÃ»§
+					//åªæœ‰ä¸€ä¸ªç”¨æˆ·
 					if((time&1)==1){
 						message.setRole((byte)1);
 						message.setYourTurn(true);
@@ -125,7 +125,7 @@ public class Server {
 					outputStreamToOtherClients.writeObject(message);
 					outputStreamToOtherClients.flush();
 				}else if(clients.size()==2){
-					//µÚ¶ş¸öÓÃ»§Ö´ºÚ£¬ºóÊÖ
+					//ç¬¬äºŒä¸ªç”¨æˆ·æ‰§é»‘ï¼Œåæ‰‹
 					if((time&1)==0){
 						message.setRole((byte)1);
 						message.setYourTurn(true);
@@ -139,38 +139,38 @@ public class Server {
 					outputStreamToOtherClients.flush();
 				}
 				while(true){
-					//½»»¥
-					//Õâ»áÒı·¢Òì³£
-					//²»¹ÜÊÕµ½Ê²Ã´ÏûÏ¢£¬¸ºÔğÖ±½Ó×ª·¢
-					Message myMessage=(Message) inputStreamFromClient.readObject();//½ÓÊÕµ½ºì·½µÄÏûÏ¢
+					//äº¤äº’
+					//è¿™ä¼šå¼•å‘å¼‚å¸¸
+					//ä¸ç®¡æ”¶åˆ°ä»€ä¹ˆæ¶ˆæ¯ï¼Œè´Ÿè´£ç›´æ¥è½¬å‘
+					Message myMessage=(Message) inputStreamFromClient.readObject();//æ¥æ”¶åˆ°çº¢æ–¹çš„æ¶ˆæ¯
 					boolean restart=false;
 					if(myMessage instanceof DataMessage){
 						data[((DataMessage) myMessage).getRow()-1][((DataMessage) myMessage).getCol()-1]=data[((DataMessage) myMessage).getPrerow()-1][((DataMessage) myMessage).getPrecol()-1];
 						data[((DataMessage) myMessage).getPrerow()-1][((DataMessage) myMessage).getPrecol()-1]=0;
 						((DataMessage) myMessage).setData(Common.Array_to_String(data));
-						withdraw.add(myMessage);//ÊÕµ½±¨ÎÄ¾Í¼ÓÈëµ½ÁĞ±íÖĞ
+						withdraw.add(myMessage);//æ”¶åˆ°æŠ¥æ–‡å°±åŠ å…¥åˆ°åˆ—è¡¨ä¸­
 					}else if(myMessage instanceof NormalMessage){
-						//Ò»°ãÏûÏ¢
-						if(((NormalMessage) myMessage).getAttach().equals("Í¬Òâ»ÚÆå")){
+						//ä¸€èˆ¬æ¶ˆæ¯
+						if(((NormalMessage) myMessage).getAttach().equals("åŒæ„æ‚”æ£‹")){
 							withdraw.remove();
 							myMessage=(DataMessage) withdraw.getLast();
-							myMessage.setValid(false);//·¢¸øËùÓĞÈË
-							data=Common.String_to_Array(((DataMessage)myMessage).getData());//³·ÏúºóµÄÆå¾Ö
-						}else if(((NormalMessage) myMessage).getAttach().equals("ÓÎÏ·½áÊø")){
-							//ÊÕµ½¸ÃsocketµÄÍ¨Öª,ÄÇÃ´¸ÃsocketÊÇÊ¤Àû·½
-							myMessage.setValid(false);//·¢¸øËùÓĞÈË
-						}else if(((NormalMessage)myMessage).getAttach().equals("Í¬Òâ¿ª¾Ö")){
-							myMessage.setValid(false);//·¢ËÍ¸øËùÓĞÈË
+							myMessage.setValid(false);//å‘ç»™æ‰€æœ‰äºº
+							data=Common.String_to_Array(((DataMessage)myMessage).getData());//æ’¤é”€åçš„æ£‹å±€
+						}else if(((NormalMessage) myMessage).getAttach().equals("æ¸¸æˆç»“æŸ")){
+							//æ”¶åˆ°è¯¥socketçš„é€šçŸ¥,é‚£ä¹ˆè¯¥socketæ˜¯èƒœåˆ©æ–¹
+							myMessage.setValid(false);//å‘ç»™æ‰€æœ‰äºº
+						}else if(((NormalMessage)myMessage).getAttach().equals("åŒæ„å¼€å±€")){
+							myMessage.setValid(false);//å‘é€ç»™æ‰€æœ‰äºº
 							init();
 							restart=true;
 							time++;
-						}else if(((NormalMessage)myMessage).getAttach().equals("Í¬ÒâÇóºÍ")){
+						}else if(((NormalMessage)myMessage).getAttach().equals("åŒæ„æ±‚å’Œ")){
 							myMessage.setValid(false);
 						}
 					}
-					myMessage.setStep(withdraw.allSteps());//¼ÓÉÏ²½Êı
+					myMessage.setStep(withdraw.allSteps());//åŠ ä¸Šæ­¥æ•°
 					for(Socket s:clients){
-						if(s==current_socket && myMessage.isValid()) continue;//Èç¹ûvalidÎªfalse±íÃ÷·¢¸øÈÎºÎÈË
+						if(s==current_socket && myMessage.isValid()) continue;//å¦‚æœvalidä¸ºfalseè¡¨æ˜å‘ç»™ä»»ä½•äºº
 						outputStreamToOtherClients=new MyObjectOutputStream(s.getOutputStream());
 						outputStreamToOtherClients.writeObject(myMessage);
 						outputStreamToOtherClients.flush();
@@ -181,7 +181,7 @@ public class Server {
 				// TODO Auto-generated catch block
 				clients.clear();
 				init();
-			}finally {//ºó´¦Àí
+			}finally {//åå¤„ç†
 				try {
 					inputStreamFromClient.close();
 					outputStreamToOtherClients.close();
@@ -194,7 +194,7 @@ public class Server {
 	}
 	
 	/**
-	 * main·½·¨£¬Ö´ĞĞ·şÎñÆ÷ÔËĞĞ
+	 * mainæ–¹æ³•ï¼Œæ‰§è¡ŒæœåŠ¡å™¨è¿è¡Œ
 	 * @param
 	 */
 	public static void main(String[] args) {

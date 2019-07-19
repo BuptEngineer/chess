@@ -1,9 +1,9 @@
 package mychess.entity;
 
 public enum Code {
-	//ÏûÏ¢×´Ì¬´úºÅ
-	Normal(200,"Õı³£"),Redo(201,"³·Ïú"),Aggree(500,"Í¬Òâ»ÚÆå"),Refuse(501,"²»Í¬Òâ»ÚÆå"),
-	Free(100,"¿ÕÏĞ"),Over(104,"½áÊø"),Run(103,"½øĞĞ"),Prepare(102,"×¼±¸");
+	//æ¶ˆæ¯çŠ¶æ€ä»£å·
+	Normal(200,"æ­£å¸¸"),Redo(201,"æ’¤é”€"),Aggree(500,"åŒæ„æ‚”æ£‹"),Refuse(501,"ä¸åŒæ„æ‚”æ£‹"),
+	Free(100,"ç©ºé—²"),Over(104,"ç»“æŸ"),Run(103,"è¿›è¡Œ"),Prepare(102,"å‡†å¤‡");
 	
 	private int id;
 	private String des;

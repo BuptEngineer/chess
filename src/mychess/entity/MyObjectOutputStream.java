@@ -15,7 +15,6 @@ public class MyObjectOutputStream extends ObjectOutputStream{
 		 super(out);
 	 }
 	 
-	 //重写ObjectOutputStream的方法,解决invalid AC问题
 	 protected void writeStreamHeader() throws IOException {
 		  return;
 	 } 
