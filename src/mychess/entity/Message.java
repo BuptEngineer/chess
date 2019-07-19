@@ -3,21 +3,21 @@ package mychess.entity;
 import java.io.Serializable;
 
 /**
- * ¶¨ÒåÍ³Ò»±¨ÎÄ¸ñÊ½£¬ÓÃÓÚ¿Í»§¶ËºÍ·şÎñÆ÷¶Ë½»»¥
- * 2019Äê1ÔÂ3ÈÕ ÏÂÎç9:55:29
+ * å®šä¹‰ç»Ÿä¸€æŠ¥æ–‡æ ¼å¼ï¼Œç”¨äºå®¢æˆ·ç«¯å’ŒæœåŠ¡å™¨ç«¯äº¤äº’
+ * 2019å¹´1æœˆ3æ—¥ ä¸‹åˆ9:55:29
  */
 public class Message implements Serializable,Cloneable{
 	private static final long serialVersionUID = 1L;
 
-	public Code code;//ÏûÏ¢×´Ì¬´úºÅ£¬°üÀ¨ÏµÍ³ÏûÏ¢´úºÅ£¬ÓÃ»§ÏûÏ¢´úºÅÒÔ¼°ÓÎÏ·¹ı³Ì´úºÅµÈ
+	public Code code;//æ¶ˆæ¯çŠ¶æ€ä»£å·ï¼ŒåŒ…æ‹¬ç³»ç»Ÿæ¶ˆæ¯ä»£å·ï¼Œç”¨æˆ·æ¶ˆæ¯ä»£å·ä»¥åŠæ¸¸æˆè¿‡ç¨‹ä»£å·ç­‰
 	
-	public boolean isValid=true;//¸Ã±¨ÎÄÊÇ·ñ¶Ôµ±Ç°socketÎŞĞ§
+	public boolean isValid=true;//è¯¥æŠ¥æ–‡æ˜¯å¦å¯¹å½“å‰socketæ— æ•ˆ
 	
-	public byte role;//µ±Ç°½ÇÉ«
+	public byte role;//å½“å‰è§’è‰²
 	
-	public boolean yourTurn;//ÊÇ·ñÊÇÄãµÄ»ØºÏ
+	public boolean yourTurn;//æ˜¯å¦æ˜¯ä½ çš„å›åˆ
 	
-	public int step;//µ±Ç°²½Êı
+	public int step;//å½“å‰æ­¥æ•°
 
 	public boolean isValid() {
 		return isValid;

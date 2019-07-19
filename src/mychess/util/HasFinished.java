@@ -6,14 +6,14 @@ import java.util.List;
 import javax.swing.JOptionPane;
 
 /**
- * ÓÃÓÚÅĞ¶ÏÓÎÏ·ÊÇ·ñ½áÊøµÄÀà
+ * ç”¨äºåˆ¤æ–­æ¸¸æˆæ˜¯å¦ç»“æŸçš„ç±»
  */
 public class HasFinished {
 	private int[][] data;
 
 	/**
-	 * ³õÊ¼»¯µ±Ç°Æå¾Ö×´Ì¬Êı×é
-	 * @param dataÊÇ´«½øÀ´µÄÆå¾ÖÊı×é
+	 * åˆå§‹åŒ–å½“å‰æ£‹å±€çŠ¶æ€æ•°ç»„
+	 * @param dataæ˜¯ä¼ è¿›æ¥çš„æ£‹å±€æ•°ç»„
 	 */
 	public HasFinished(int[][] data) {
 		// TODO Auto-generated constructor stub
@@ -21,17 +21,17 @@ public class HasFinished {
 	}
 	
 	/**
-	 * ÅĞ¶ÏÓÎÏ·ÊÇ·ñ½áÊø
-	 * @param isRedÊÇµ±Ç°Ö´ÆåµÄ½ÇÉ«
+	 * åˆ¤æ–­æ¸¸æˆæ˜¯å¦ç»“æŸ
+	 * @param isRedæ˜¯å½“å‰æ‰§æ£‹çš„è§’è‰²
 	 */
 	public boolean isFinished(boolean isRed) {
-		//½«¾ü±»³Ô
+		//å°†å†›è¢«åƒ
 		if(isRed && !Shuai_exists(data)){
 			return true;
 		}else if(!isRed && !Jiang_exists(data)){
 			return true;
 		}
-		//ÎŞÆå¿É×ß
+		//æ— æ£‹å¯èµ°
 		List<List<int[]>> all=all_move(Common.Backup(data),isRed);
 		for(int i=0;i<all.size();i++){
 			for(int j=0;j<all.get(i).size();j++){
@@ -48,11 +48,11 @@ public class HasFinished {
 	}
 
 	/**
-	 * »ñÈ¡µ±Ç°½ÇÉ«ËùÓĞ¿ÉÒÔÒÆ¶¯×ø±êµÄ¼¯ºÏ
-	 * @param isRedÊÇµ±Ç°½ÇÉ«,
-	 * 			·µ»ØµÄÊÇListµÄList,ÀïÃæµÄListÊÇ¶ÔÓÚÃ¿¸ö±êÇ©µÄËùÓĞÒÆ¶¯×ø±ê¼¯ºÏ£¬ÍâÃæµÄListÊÇËùÓĞ±êÇ©µÄÒÆ¶¯¼¯ºÏ
+	 * è·å–å½“å‰è§’è‰²æ‰€æœ‰å¯ä»¥ç§»åŠ¨åæ ‡çš„é›†åˆ
+	 * @param isRedæ˜¯å½“å‰è§’è‰²,
+	 * 			è¿”å›çš„æ˜¯Listçš„List,é‡Œé¢çš„Listæ˜¯å¯¹äºæ¯ä¸ªæ ‡ç­¾çš„æ‰€æœ‰ç§»åŠ¨åæ ‡é›†åˆï¼Œå¤–é¢çš„Listæ˜¯æ‰€æœ‰æ ‡ç­¾çš„ç§»åŠ¨é›†åˆ
 	 */
-	public static List<List<int[]>> all_move(int[][] datasub,boolean isRed) {// ºì·½»òÕßÀ¶·½´ËÊ±ÄÜ¶¯µÄËùÓĞ×Ó
+	public static List<List<int[]>> all_move(int[][] datasub,boolean isRed) {// çº¢æ–¹æˆ–è€…è“æ–¹æ­¤æ—¶èƒ½åŠ¨çš„æ‰€æœ‰å­
 		List<List<int[]>> all = new ArrayList<>();
 		CanMove cm = new CanMove();
 		//int[][] datasub = Common.Backup(data);
@@ -60,42 +60,42 @@ public class HasFinished {
 			for (int j = 0; j < datasub[i].length; j++) {
 				if ((!isRed && datasub[i][j] > 7) ||
 						(isRed && datasub[i][j]<=7))
-					continue;// ¸Ã×Ó²»ÊÇ×Ô¼ºµÄ,ÒòÎªµ±Ç°·½Ö´ĞĞÍêµ½ÁíÒ»·½£¬ÕâÀïÖ±½Ó¿¼ÂÇµ½ÁíÒ»·½ÁË
+					continue;// è¯¥å­ä¸æ˜¯è‡ªå·±çš„,å› ä¸ºå½“å‰æ–¹æ‰§è¡Œå®Œåˆ°å¦ä¸€æ–¹ï¼Œè¿™é‡Œç›´æ¥è€ƒè™‘åˆ°å¦ä¸€æ–¹äº†
 				switch (datasub[i][j]) {
-					case 1:// ³µ
+					case 1:// è½¦
 					case 8:
 						all.add(cm.che_move(datasub, i, j, datasub[i][j]));
 						break;
-					case 2:// Âí
+					case 2:// é©¬
 					case 9:
 						all.add(cm.ma_move(datasub, i, j, datasub[i][j]));
 						break;
-					case 3:// Ïó
+					case 3:// è±¡
 						all.add(cm.xiang_1_move(datasub, i, j));
 						break;
-					case 4:// Ê¿
+					case 4:// å£«
 						all.add(cm.shi_1_move(datasub, i, j));
 						break;
-					case 5:// Ë§
+					case 5:// å¸…
 						all.add(cm.jiang_1_move(datasub, i, j));
 						break;
-					case 6:// ÅÚ
+					case 6:// ç‚®
 					case 13:
 						all.add(cm.pao_move(datasub, i, j, datasub[i][j]));
 						break;
-					case 7:// ±ø
+					case 7:// å…µ
 						all.add(cm.bing_1_move(datasub, i, j));
 						break;
-					case 10:// Ïà
+					case 10:// ç›¸
 						all.add(cm.xiang_2_move(datasub, i, j));
 						break;
-					case 11:// Ê¿
+					case 11:// å£«
 						all.add(cm.shi_2_move(datasub, i, j));
 						break;
-					case 12:// ½«
+					case 12:// å°†
 						all.add(cm.jiang_2_move(datasub, i, j));
 						break;
-					case 14:// ×ä
+					case 14:// å’
 						all.add(cm.bing_2_move(datasub, i, j));
 						break;
 					default:
@@ -107,8 +107,8 @@ public class HasFinished {
 	}
 
 	/**
-	 * ÊÇ·ñ±»½«¾ü
-	 * @param subucÊÇµ±Ç°Æå¾ÖÊı×éµÄ±¸·İÊı×é
+	 * æ˜¯å¦è¢«å°†å†›
+	 * @param subucæ˜¯å½“å‰æ£‹å±€æ•°ç»„çš„å¤‡ä»½æ•°ç»„
 	 */
 	public static boolean isJiang(int[][] subuc) {
 		int jx = -1;
@@ -123,8 +123,8 @@ public class HasFinished {
 		}
 		if (jx == -1)
 			return true;
-		// ÕÒµ½½«¾üµÄÎ»ÖÃ
-		// ºá×Å¿´ÊÇ·ñÓĞ¶Ô·½µÄ³µ
+		// æ‰¾åˆ°å°†å†›çš„ä½ç½®
+		// æ¨ªç€çœ‹æ˜¯å¦æœ‰å¯¹æ–¹çš„è½¦
 		for (int h = jy - 1; h >= 0; h--) {
 			if (subuc[jx][h] == 0)
 				continue;
@@ -143,7 +143,7 @@ public class HasFinished {
 				break;
 			}
 		}
-		// Êú×Å¿´
+		// ç«–ç€çœ‹
 		if (jx - 1 >= 0) {
 			for (int h = jx - 1; h >= 0; h--) {
 				if (subuc[h][jy] == 0)
@@ -165,12 +165,12 @@ public class HasFinished {
 			}
 		}
 
-		// ¿´ÊÇ·ñ±»ÅÚ½«¾ü
+		// çœ‹æ˜¯å¦è¢«ç‚®å°†å†›
 		for (int h = jy - 1; h >= 0; h--) {
 			if (subuc[jx][h] == 0)
 				continue;
 			else {
-				// ¸ôÒ»¸ö×ÓÁË
+				// éš”ä¸€ä¸ªå­äº†
 				if (h - 1 >= 0) {
 					for (int k = h - 1; k >= 0; k--) {
 						if (subuc[jx][k] == 0)
@@ -242,7 +242,7 @@ public class HasFinished {
 			}
 		}
 
-		// ¿´ÊÇ·ñ±»Âí½«¾ü
+		// çœ‹æ˜¯å¦è¢«é©¬å°†å†›
 		if (jx - 1 >= 0 && subuc[jx - 1][jy + 1] == 0) {
 			if ((jx - 2 >= 0 && subuc[jx - 2][jy + 1] == 2) || subuc[jx - 1][jy + 2] == 2) {
 				return true;
@@ -267,7 +267,7 @@ public class HasFinished {
 			}
 		}
 
-		// ¿´ÊÇ·ñ±»¶ÔÃæµÄË§½«¾ü
+		// çœ‹æ˜¯å¦è¢«å¯¹é¢çš„å¸…å°†å†›
 		for (int h = jx + 1; h < 10; h++) {
 			if (subuc[h][jy] == 0)
 				continue;
@@ -278,7 +278,7 @@ public class HasFinished {
 			}
 		}
 
-		// ¿´ÊÇ·ñ±»¶ÔÃæµÄ±ø½«¾ü
+		// çœ‹æ˜¯å¦è¢«å¯¹é¢çš„å…µå°†å†›
 		if (subuc[jx + 1][jy] == 7 || subuc[jx][jy - 1] == 7 || subuc[jx][jy + 1] == 7)
 			return true;
 
@@ -286,11 +286,11 @@ public class HasFinished {
 	}
 
 	/**
-	 * Ë§ÊÇ·ñ±»½«¾ü
-	 * @param subucÊÇÆå¾Ö±¸·İÊı×é
+	 * å¸…æ˜¯å¦è¢«å°†å†›
+	 * @param subucæ˜¯æ£‹å±€å¤‡ä»½æ•°ç»„
 	 */
 	public static boolean isShuai(int[][] subuc) {
-		// ¿´ÊÇ·ñ±»³µ½«¾ü
+		// çœ‹æ˜¯å¦è¢«è½¦å°†å†›
 		int jx = -1;
 		int jy = -1;
 		for (int i = 0; i < 10; i++) {
@@ -303,8 +303,8 @@ public class HasFinished {
 		}
 		if (jx == -1)
 			return true;
-		// ÕÒµ½½«¾üµÄÎ»ÖÃ
-		// ºá×Å¿´ÊÇ·ñÓĞ¶Ô·½µÄ³µ
+		// æ‰¾åˆ°å°†å†›çš„ä½ç½®
+		// æ¨ªç€çœ‹æ˜¯å¦æœ‰å¯¹æ–¹çš„è½¦
 		for (int h = jy - 1; h >= 0; h--) {
 			if (subuc[jx][h] == 0)
 				continue;
@@ -323,7 +323,7 @@ public class HasFinished {
 				break;
 			}
 		}
-		// Êú×Å¿´
+		// ç«–ç€çœ‹
 		for (int h = jx - 1; h >= 0; h--) {
 			if (subuc[h][jy] == 0)
 				continue;
@@ -346,12 +346,12 @@ public class HasFinished {
 			}
 		}
 
-		// ¿´ÊÇ·ñ±»ÅÚ½«¾ü
+		// çœ‹æ˜¯å¦è¢«ç‚®å°†å†›
 		for (int h = jy - 1; h >= 0; h--) {
 			if (subuc[jx][h] == 0)
 				continue;
 			else {
-				// ¸ôÒ»¸ö×ÓÁË
+				// éš”ä¸€ä¸ªå­äº†
 				if (h - 1 >= 0) {
 					for (int k = h - 1; k >= 0; k--) {
 						if (subuc[jx][k] == 0)
@@ -425,7 +425,7 @@ public class HasFinished {
 			}
 		}
 
-		// ¿´ÊÇ·ñ±»Âí½«¾ü
+		// çœ‹æ˜¯å¦è¢«é©¬å°†å†›
 		if (subuc[jx - 1][jy + 1] == 0) {
 			if (subuc[jx - 2][jy + 1] == 9 || subuc[jx - 1][jy + 2] == 9) {
 				return true;
@@ -448,9 +448,9 @@ public class HasFinished {
 			if ((jx + 2 < 10 && subuc[jx + 2][jy - 1] == 9) || subuc[jx + 1][jy - 2] == 9) {
 				return true;
 			}
-		} // ¶Ô·½µÄÂí£¬ÕâÀï·¸´í°Ñ9Ğ´³ÉÁË2
+		} // å¯¹æ–¹çš„é©¬ï¼Œè¿™é‡ŒçŠ¯é”™æŠŠ9å†™æˆäº†2
 
-		// ¿´ÊÇ·ñ±»¶ÔÃæµÄË§½«¾ü
+		// çœ‹æ˜¯å¦è¢«å¯¹é¢çš„å¸…å°†å†›
 		for (int h = jx - 1; h >= 0; h--) {
 			if (subuc[h][jy] == 0)
 				continue;
@@ -461,7 +461,7 @@ public class HasFinished {
 			}
 		}
 
-		// ¿´ÊÇ·ñ±»¶ÔÃæµÄ±ø½«¾ü
+		// çœ‹æ˜¯å¦è¢«å¯¹é¢çš„å…µå°†å†›
 		if (subuc[jx - 1][jy] == 14 || subuc[jx][jy - 1] == 14 || subuc[jx][jy + 1] == 14)
 			return true;
 
@@ -469,21 +469,21 @@ public class HasFinished {
 	}
 	
 	/**
-	 * ÅĞ¶Ïµ±Ç°×ßÊÇ·ñÔÚËÍ½«£¬²¢»ØÖ´¸øÉÏ²ãÒ»¸öĞÅºÅ£¨true or false)
-	 * @param datasubÊÇÆå¾Ö±¸·İÊı×é,yourTurnÊÇ·ñµ½×Ô¼ºµÄ»ØºÏ
+	 * åˆ¤æ–­å½“å‰èµ°æ˜¯å¦åœ¨é€å°†ï¼Œå¹¶å›æ‰§ç»™ä¸Šå±‚ä¸€ä¸ªä¿¡å·ï¼ˆtrue or false)
+	 * @param datasubæ˜¯æ£‹å±€å¤‡ä»½æ•°ç»„,yourTurnæ˜¯å¦åˆ°è‡ªå·±çš„å›åˆ
 	 */
 	public static boolean jiangTip(int[][] datasub,boolean yourTurn) {
 		if((yourTurn && isShuai(datasub))
 				|| (!yourTurn && isJiang(datasub))){
-			JOptionPane.showMessageDialog(null, "½«¾ü");
+			JOptionPane.showMessageDialog(null, "å°†å†›");
 			return false;
 		}
 		return true;
 	}
 	
 	/**
-	 * ÅĞ¶ÏË§ÊÇ·ñÔÚ¾Å¹¬ÖĞ
-	 * @param dataÊÇÆå¾ÖÊı×é
+	 * åˆ¤æ–­å¸…æ˜¯å¦åœ¨ä¹å®«ä¸­
+	 * @param dataæ˜¯æ£‹å±€æ•°ç»„
 	 */
 	private boolean Shuai_exists(int[][] data) {
 		for(int i=7;i<=9;i++)
@@ -494,8 +494,8 @@ public class HasFinished {
 	}
 	
 	/**
-	 * ÅĞ¶Ï½«ÊÇ·ñÔÚ¾Å¹¬ÖĞ
-	 * @param dataÊÇÆå¾ÖÊı×é
+	 * åˆ¤æ–­å°†æ˜¯å¦åœ¨ä¹å®«ä¸­
+	 * @param dataæ˜¯æ£‹å±€æ•°ç»„
 	 */
 	private boolean Jiang_exists(int[][] data) {
 		for(int i=0;i<=2;i++)

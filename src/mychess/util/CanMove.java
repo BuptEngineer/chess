@@ -4,35 +4,35 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * ÕâÊÇÓÃÔÚ¸ø¶¨µÄÆå¾ÖÖĞ£¬¶ÔÓÚ¸øµÄÒ»¸ö¹Ì¶¨Î»ÖÃÉÏµÄÆå×Ó£¬¸ÃÆå×ÓËùÓĞÄÜ×ßµÄÎ»ÖÃµÄÀà
+ * è¿™æ˜¯ç”¨åœ¨ç»™å®šçš„æ£‹å±€ä¸­ï¼Œå¯¹äºç»™çš„ä¸€ä¸ªå›ºå®šä½ç½®ä¸Šçš„æ£‹å­ï¼Œè¯¥æ£‹å­æ‰€æœ‰èƒ½èµ°çš„ä½ç½®çš„ç±»
  */
 public class CanMove {
 	/**
-	 * »ñÈ¡ÔÚ(i,j)Î»ÖÃÉÏµÄ³µ,ÄÜÔÚµ±Ç°Æå¾ÖdataÖĞËùÓĞ¿ÉÄÜÒÆ¶¯µÄÎ»ÖÃ¼¯ºÏ
-	 * @param dataÊÇµ±Ç°Æå¾ÖÊı×é£¬iÊÇÆå¾ÖÖĞµÄĞĞ×ø±ê´Ó0¿ªÊ¼,jÊÇÆå¾ÖÖĞµÄÁĞ×ø±ê´Ó0¿ªÊ¼,
-	 * 		labelÊÇµ±Ç°±êÇ©£¨³µ£©<br>
-	 * 		·µ»ØµÄÊÇÒ»¸öÁĞ±í£¬Õâ¸öÁĞ±í°üº¬ËùÓĞµÄ¿ÉÄÜÎ»ÖÃ¼¯ºÏ¡£¿ÉÄÜÎ»ÖÃÓÉÁ½¶Ô×ø±ê×é³É£¬·Ö±ğÊÇÒÆ¶¯Ç°µÄ×ø±êºÍ
-	 * 		¿ÉÄÜÒÆ¶¯ºóµÄ×ø±ê
+	 * è·å–åœ¨(i,j)ä½ç½®ä¸Šçš„è½¦,èƒ½åœ¨å½“å‰æ£‹å±€dataä¸­æ‰€æœ‰å¯èƒ½ç§»åŠ¨çš„ä½ç½®é›†åˆ
+	 * @param dataæ˜¯å½“å‰æ£‹å±€æ•°ç»„ï¼Œiæ˜¯æ£‹å±€ä¸­çš„è¡Œåæ ‡ä»0å¼€å§‹,jæ˜¯æ£‹å±€ä¸­çš„åˆ—åæ ‡ä»0å¼€å§‹,
+	 * 		labelæ˜¯å½“å‰æ ‡ç­¾ï¼ˆè½¦ï¼‰<br>
+	 * 		è¿”å›çš„æ˜¯ä¸€ä¸ªåˆ—è¡¨ï¼Œè¿™ä¸ªåˆ—è¡¨åŒ…å«æ‰€æœ‰çš„å¯èƒ½ä½ç½®é›†åˆã€‚å¯èƒ½ä½ç½®ç”±ä¸¤å¯¹åæ ‡ç»„æˆï¼Œåˆ†åˆ«æ˜¯ç§»åŠ¨å‰çš„åæ ‡å’Œ
+	 * 		å¯èƒ½ç§»åŠ¨åçš„åæ ‡
 	 */
 	public List<int[]> che_move(int[][] data,int i,int j,int label) {
 		List<int[]> retList=new ArrayList<int[]>();
-		//ÊÇ³µ
-		//¹Û²ìºáĞĞ×ó±ß¿ÉÒÔÒÆ¶¯×îÔ¶´¦
+		//æ˜¯è½¦
+		//è§‚å¯Ÿæ¨ªè¡Œå·¦è¾¹å¯ä»¥ç§»åŠ¨æœ€è¿œå¤„
 		if(j-1>=0){
 			for(int h=j-1;h>=0;h--){
 				if(data[i][h]==0){
 					retList.add(new int[]{i,j,i,h});
 				}else if((label<=7 && data[i][h]>=8) || (label>=8 && data[i][h]<=7)){
 					retList.add(new int[]{i,j,i,h});
-					break;//³Ô×Ó
+					break;//åƒå­
 				}else{
-					//×Ô¼º×Ó
+					//è‡ªå·±å­
 					break;
 				}
 			}
 		}
 		
-		//¹Û²ìºáĞĞÓÒ±ß¿ÉÒÔÒÆ¶¯µÄ×îÔ¶´¦
+		//è§‚å¯Ÿæ¨ªè¡Œå³è¾¹å¯ä»¥ç§»åŠ¨çš„æœ€è¿œå¤„
 		if(j+1<9){
 			for(int h=j+1;h<9;h++){
 				if(data[i][h]==0){
@@ -46,7 +46,7 @@ public class CanMove {
 			}
 		}
 
-		//¹Û²ì×İĞĞÉÏÃæ×î´ó
+		//è§‚å¯Ÿçºµè¡Œä¸Šé¢æœ€å¤§
 		if(i-1>=0){
 			for(int k=i-1;k>=0;k--){
 				if(data[k][j]==0){
@@ -60,7 +60,7 @@ public class CanMove {
 			}
 		}
 
-		//¹Û²ì×İĞĞÏÂÃæ×î´ó
+		//è§‚å¯Ÿçºµè¡Œä¸‹é¢æœ€å¤§
 		if(i+1<10){
 			for(int k=i+1;k<10;k++){
 				if(data[k][j]==0){
@@ -78,7 +78,7 @@ public class CanMove {
 	
 	public List<int[]> ma_move(int[][] data,int i,int j,int label) {
 		List<int[]> retList=new ArrayList<>();
-		//¶«±±·½Ïò
+		//ä¸œåŒ—æ–¹å‘
 		if(i-2>=0 && j+1<9){
 			if(data[i-1][j]==0){
 				if(data[i-2][j+1]==0 || (label<=7 && data[i-2][j+1]>=8) || (label>=8 && data[i-2][j+1]<=7)){
@@ -86,7 +86,7 @@ public class CanMove {
 				}
 			}
 		}
-		//¶«±±ÌÉ
+		//ä¸œåŒ—èºº
 		if(i-1>=0 && j+2<9){
 			if(data[i][j+1]==0){
 				if(data[i-1][j+2]==0 || (label<=7 && data[i-1][j+2]>=8) || (label>=8 && data[i-1][j+2]<=7)){
@@ -94,7 +94,7 @@ public class CanMove {
 				}
 			}
 		}
-		//¶«ÄÏÌÉ
+		//ä¸œå—èºº
 		if(i+1<10 && j+2<9){
 			if(data[i][j+1]==0){
 				if(data[i+1][j+2]==0 || (label<=7 && data[i+1][j+2]>=8) || (label>=8 && data[i+1][j+2]<=7)){
@@ -102,7 +102,7 @@ public class CanMove {
 				}
 			}
 		}
-		//¶«ÄÏÌø
+		//ä¸œå—è·³
 		if(i+2<10 && j+1<9){
 			if(data[i+1][j]==0){
 				if(data[i+2][j+1]==0 || (label<=7 && data[i+2][j+1]>=8) || (label>=8 && data[i+2][j+1]<=7)){
@@ -110,7 +110,7 @@ public class CanMove {
 				}
 			}
 		}
-		//Î÷ÄÏÌÉ
+		//è¥¿å—èºº
 		if(i+1<9 && j-2>=0){
 			if(data[i][j-1]==0){
 				if(data[i+1][j-2]==0 || (label<=7 && data[i+1][j-2]>=8) || (label>=8 && data[i+1][j-2]<=7)){
@@ -118,7 +118,7 @@ public class CanMove {
 				}
 			}
 		}
-		//Î÷ÄÏÌø
+		//è¥¿å—è·³
 		if(i+2<10 && j-1>=0){
 			if(data[i+1][j]==0){
 				if(data[i+2][j-1]==0 || (label<=7 && data[i+2][j-1]>=8) || (label>=8 && data[i+2][j-1]<=7)){
@@ -126,7 +126,7 @@ public class CanMove {
 				}
 			}
 		}
-		//Î÷±±ÌÉ
+		//è¥¿åŒ—èºº
 		if(i-1>=0 && j-2>=0){
 			if(data[i][j-1]==0){
 				if(data[i-1][j-2]==0 || (label<=7 && data[i-1][j-2]>=8) || (label>=8 && data[i-1][j-2]<=7)){
@@ -134,7 +134,7 @@ public class CanMove {
 				}
 			}
 		}
-		//Î÷±±Ìø
+		//è¥¿åŒ—è·³
 		if(i-2>=0 && j-1>=0){
 			if(data[i-1][j]==0){
 				if(data[i-2][j-1]==0 || (label<=7 && data[i-2][j-1]>=8) || (label>=8 && data[i-2][j-1]<=7)){
@@ -146,7 +146,7 @@ public class CanMove {
 	}
 	
 	public List<int[]> pao_move(int[][] data,int i,int j,int label) {
-		//ÊÇÅÚ
+		//æ˜¯ç‚®
 		List<int[]> retList=new ArrayList<>();
 		if(j-1>=0){
 			for(int h=j-1;h>=0;h--){
@@ -241,8 +241,8 @@ public class CanMove {
 	
 	public List<int[]> xiang_1_move(int[][] data,int i,int j) {
 		List<int[]> retList=new ArrayList<>();
-		//Ïà
-		//¶«±±
+		//ç›¸
+		//ä¸œåŒ—
 		if(i-2>=10/2 && j+2<9){
 			if(data[i-1][j+1]==0){
 				if(data[i-2][j+2]==0 ||  data[i-2][j+2]>=8){
@@ -250,7 +250,7 @@ public class CanMove {
 				}
 			}
 		}
-		//¶«ÄÏ
+		//ä¸œå—
 		if(i+2<10 && j+2<9){
 			if(data[i+1][j+1]==0){
 				if(data[i+2][j+2]==0 || data[i+2][j+2]>=8){
@@ -258,7 +258,7 @@ public class CanMove {
 				}
 			}
 		}
-		//Î÷ÄÏ
+		//è¥¿å—
 		if(i+2<10 && j-2>=0){
 			if(data[i+1][j-1]==0){
 				if(data[i+2][j-2]==0 || data[i+2][j-2]>=8){
@@ -266,7 +266,7 @@ public class CanMove {
 				}
 			}
 		}
-		//Î÷±±
+		//è¥¿åŒ—
 		if(i-2>=10/2 && j-2>=0){
 			if(data[i-1][j-1]==0){
 				if(data[i-2][j-2]==0 || data[i-2][j-2]>=8){
@@ -278,9 +278,9 @@ public class CanMove {
 	}
 	
 	public List<int[]> xiang_2_move(int[][] data,int i,int j) {
-		//ÏñÀ¶
+		//åƒè“
 		List<int[]> retList=new ArrayList<>();
-		//¶«±±
+		//ä¸œåŒ—
 		if(i-2>=0 && j+2<9){
 			if(data[i-1][j+1]==0){
 				if(data[i-2][j+2]<=7){
@@ -288,7 +288,7 @@ public class CanMove {
 				}
 			}
 		}
-		//¶«ÄÏ
+		//ä¸œå—
 		if(i+2<10/2 && j+2<9){
 			if(data[i+1][j+1]==0){
 				if(data[i+2][j+2]<=7){
@@ -296,7 +296,7 @@ public class CanMove {
 				}
 			}
 		}
-		//Î÷ÄÏ
+		//è¥¿å—
 		if(i+2<10/2 && j-2>=0){
 			if(data[i+1][j-1]==0){
 				if(data[i+2][j-2]<=7){
@@ -304,7 +304,7 @@ public class CanMove {
 				}
 			}
 		}
-		//Î÷±±
+		//è¥¿åŒ—
 		if(i-2>=0 && j-2>=0){
 			if(data[i-1][j-1]==0){
 				if(data[i-2][j-2]<=7){
@@ -316,27 +316,27 @@ public class CanMove {
 	}
 	
 	public List<int[]> shi_1_move(int[][] data,int i,int j) {
-		//Ê¿
+		//å£«
 		List<int[]> retList=new ArrayList<>();
-		//¶«±±
+		//ä¸œåŒ—
 		if(i-1>=7 && j+1<=5){
 			if(data[i-1][j+1]==0 || data[i-1][j+1]>=8){
 				retList.add(new int[]{i,j,i-1,j+1});
 			}
 		}
-		//¶«ÄÏ
+		//ä¸œå—
 		if(i+1<10 && j+1<=5){
 			if(data[i-1][j+1]==0 || data[i-1][j+1]>=8){
 				retList.add(new int[]{i,j,i+1,j+1});
 			}
 		}
-		//Î÷ÄÏ
+		//è¥¿å—
 		if(i+1<10 && j-1>=3){
 			if(data[i+1][j-1]==0 || data[i+1][j-1]>=8){
 				retList.add(new int[]{i,j,i+1,j-1});
 			}
 		}
-		//Î÷±±
+		//è¥¿åŒ—
 		if(i-1>=7 && j-1>=3){
 			if(data[i-1][j-1]==0 || data[i-1][j-1]>=8){
 				retList.add(new int[]{i,j,i-1,j-1});
@@ -346,27 +346,27 @@ public class CanMove {
 	}
 	
 	public List<int[]> shi_2_move(int[][] data,int i,int j) {
-		//À¶É«Ê¿
+		//è“è‰²å£«
 		List<int[]> retList=new ArrayList<>();
-		//¶«±±
+		//ä¸œåŒ—
 		if(i-1>=0 && j+1<=5){
 			if(data[i-1][j+1]<=7){
 				retList.add(new int[]{i,j,i-1,j+1});
 			}
 		}
-		//¶«ÄÏ
+		//ä¸œå—
 		if(i+1<=2 && j+1<=5){
 			if(data[i+1][j+1]<=7){
 				retList.add(new int[]{i,j,i+1,j+1});
 			}
 		}
-		//Î÷ÄÏ
+		//è¥¿å—
 		if(i+1<=2 && j-1>=3){
 			if(data[i+1][j-1]<=7){
 				retList.add(new int[]{i,j,i+1,j-1});
 			}
 		}
-		//Î÷±±
+		//è¥¿åŒ—
 		if(i-1>=0 && j-1>=3){
 			if(data[i-1][j-1]<=7){
 				retList.add(new int[]{i,j,i-1,j-1});
@@ -376,27 +376,27 @@ public class CanMove {
 	}
 	
 	public List<int[]> jiang_2_move(int[][] data,int i,int j) {
-		//½«
+		//å°†
 		List<int[]> retList=new ArrayList<>();
-		//ÉÏ
+		//ä¸Š
 		if(i-1>=0){
 			if(data[i-1][j]<=7){
 				retList.add(new int[]{i,j,i-1,j});
 			}
 		}
-		//ÏÂ
+		//ä¸‹
 		if(i+1<=2){
 			if(data[i+1][j]<=7){
 				retList.add(new int[]{i,j,i+1,j});
 			}
 		}
-		//×ó
+		//å·¦
 		if(j-1>=3){
 			if(data[i][j-1]<=7){
 				retList.add(new int[]{i,j,i,j-1});
 			}
 		}
-		//ÓÒ
+		//å³
 		if(j+1<=5){
 			if(data[i][j+1]<=7){
 				retList.add(new int[]{i,j,i,j+1});
@@ -406,27 +406,27 @@ public class CanMove {
 	}
 
 	public List<int[]> jiang_1_move(int[][] data,int i,int j) {
-		//Ë§
+		//å¸…
 		List<int[]> retList=new ArrayList<>();
-		//ÉÏ
+		//ä¸Š
 		if(i-1<=7){
 			if(data[i-1][j]==0 || data[i-1][j]>=8){
 				retList.add(new int[]{i,j,i-1,j});
 			}
 		}
-		//ÏÂ
+		//ä¸‹
 		if(i+1<10){
 			if(data[i+1][j]==0 || data[i+1][j]>=8){
 				retList.add(new int[]{i,j,i+1,j});
 			}
 		}
-		//×ó
+		//å·¦
 		if(j-1>=3){
 			if(data[i][j-1]==0 || data[i][j-1]>=8){
 				retList.add(new int[]{i,j,i,j-1});
 			}
 		}
-		//ÓÒ
+		//å³
 		if(j+1<=5){
 			if(data[i][j+1]==0 || data[i][j+1]>=8){
 				retList.add(new int[]{i,j,i,j+1});
@@ -437,26 +437,26 @@ public class CanMove {
 	
 	public List<int[]> bing_1_move(int[][] data,int i,int j) {
 		List<int[]> retList=new ArrayList<>();
-		//±ø
+		//å…µ
 		if(i>4){
-			//Ã»ÓĞ¹ıºÓ
+			//æ²¡æœ‰è¿‡æ²³
 			if(data[i-1][j]==0 || data[i-1][j]>=8){
 				retList.add(new int[]{i,j,i-1,j});
 			}
 		}else{
-			//ÉÏ
+			//ä¸Š
 			if(i-1>=0){
 				if(data[i-1][j]==0 || data[i-1][j]>=8){
 					retList.add(new int[]{i,j,i-1,j});
 				}
 			}
-			//×ó
+			//å·¦
 			if(j-1>=0){
 				if(data[i][j-1]==0 || data[i][j-1]>=8){
 					retList.add(new int[]{i,j,i,j-1});
 				}
 			}
-			//ÓÒ
+			//å³
 			if(j+1<9){
 				if(data[i][j+1]==0 || data[i][j+1]>=8){
 					retList.add(new int[]{i,j,i,j+1});
@@ -468,26 +468,26 @@ public class CanMove {
 	
 	public List<int[]> bing_2_move(int[][] data,int i,int j) {
 		List<int[]> retList=new ArrayList<>();
-		//×ä
+		//å’
 		if(i<5){
-			//Ã»ÓĞ¹ıºÓ
+			//æ²¡æœ‰è¿‡æ²³
 			if(data[i+1][j]<=7){
 				retList.add(new int[]{i,j,i+1,j});
 			}
 		}else{
-			//ÉÏ
+			//ä¸Š
 			if(i+1<10){
 				if(data[i+1][j]<=7){
 					retList.add(new int[]{i,j,i+1,j});
 				}
 			}
-			//×ó
+			//å·¦
 			if(j-1>=0){
 				if(data[i][j-1]<=7){
 					retList.add(new int[]{i,j,i,j-1});
 				}
 			}
-			//ÓÒ
+			//å³
 			if(j+1<9){
 				if(data[i][j+1]<=7){
 					retList.add(new int[]{i,j,i,j+1});

@@ -15,32 +15,32 @@ import javax.swing.JPanel;
 import mychess.util.ReadProperties;
 
 
-//¸ÃÀàÊµÏÖÏóÆåµÄÍ¼ĞÎ½çÃæ,²¢¸ºÔğÍ¨ĞÅ
+//è¯¥ç±»å®ç°è±¡æ£‹çš„å›¾å½¢ç•Œé¢,å¹¶è´Ÿè´£é€šä¿¡
 public class ChessClient extends JFrame{
 
 	private static final long serialVersionUID = 1L;
-	private JButton restart=new JButton("ÖØ¿ª");
-	private JButton redo=new JButton("»ÚÆå");
-	private JButton lose=new JButton("ÈÏÊä");
-	private JButton peace=new JButton("ÇóºÍ");
-	private Image[] pics =new Image[15];//¼ÓÔØÏóÆåÍ¼Æ¬
+	private JButton restart=new JButton("é‡å¼€");
+	private JButton redo=new JButton("æ‚”æ£‹");
+	private JButton lose=new JButton("è®¤è¾“");
+	private JButton peace=new JButton("æ±‚å’Œ");
+	private Image[] pics =new Image[15];//åŠ è½½è±¡æ£‹å›¾ç‰‡
 	private ChessBoard panel;
 	
 	public ChessClient() {
-//		pics[1]=Toolkit.getDefaultToolkit().getImage("images/³µ1.png");
-//		pics[2]=Toolkit.getDefaultToolkit().getImage("images/Âí1.png");
-//		pics[3]=Toolkit.getDefaultToolkit().getImage("images/Ïà1.png");
-//		pics[4]=Toolkit.getDefaultToolkit().getImage("images/Ê¿1.png");
-//		pics[5]=Toolkit.getDefaultToolkit().getImage("images/Ë§.png");
-//		pics[6]=Toolkit.getDefaultToolkit().getImage("images/ÅÚ1.png");
-//		pics[7]=Toolkit.getDefaultToolkit().getImage("images/±ø.png");
-//		pics[8]=Toolkit.getDefaultToolkit().getImage("images/³µ2.png");
-//		pics[9]=Toolkit.getDefaultToolkit().getImage("images/Âí2.png");
-//		pics[10]=Toolkit.getDefaultToolkit().getImage("images/Ïó2.png");
-//		pics[11]=Toolkit.getDefaultToolkit().getImage("images/Ê¿2.png");
-//		pics[12]=Toolkit.getDefaultToolkit().getImage("images/½«.png");
-//		pics[13]=Toolkit.getDefaultToolkit().getImage("images/ÅÚ2.png");
-//		pics[14]=Toolkit.getDefaultToolkit().getImage("images/×ä.png");
+//		pics[1]=Toolkit.getDefaultToolkit().getImage("images/è½¦1.png");
+//		pics[2]=Toolkit.getDefaultToolkit().getImage("images/é©¬1.png");
+//		pics[3]=Toolkit.getDefaultToolkit().getImage("images/ç›¸1.png");
+//		pics[4]=Toolkit.getDefaultToolkit().getImage("images/å£«1.png");
+//		pics[5]=Toolkit.getDefaultToolkit().getImage("images/å¸….png");
+//		pics[6]=Toolkit.getDefaultToolkit().getImage("images/ç‚®1.png");
+//		pics[7]=Toolkit.getDefaultToolkit().getImage("images/å…µ.png");
+//		pics[8]=Toolkit.getDefaultToolkit().getImage("images/è½¦2.png");
+//		pics[9]=Toolkit.getDefaultToolkit().getImage("images/é©¬2.png");
+//		pics[10]=Toolkit.getDefaultToolkit().getImage("images/è±¡2.png");
+//		pics[11]=Toolkit.getDefaultToolkit().getImage("images/å£«2.png");
+//		pics[12]=Toolkit.getDefaultToolkit().getImage("images/å°†.png");
+//		pics[13]=Toolkit.getDefaultToolkit().getImage("images/ç‚®2.png");
+//		pics[14]=Toolkit.getDefaultToolkit().getImage("images/å’.png");
 		
 		pics[1]=Toolkit.getDefaultToolkit().getImage("images/chess11.png");
 		pics[2]=Toolkit.getDefaultToolkit().getImage("images/chess10.png");
@@ -118,9 +118,9 @@ public class ChessClient extends JFrame{
 	}
 	
 	public static void main(String[] args) {
-		ReadProperties.read();//¶ÁÈ¡ÅäÖÃÎÄ¼ş
+		ReadProperties.read();//è¯»å–é…ç½®æ–‡ä»¶
 		JFrame frame=new ChessClient();
-		frame.setTitle("ÏóÆå");
+		frame.setTitle("è±¡æ£‹");
 		frame.setSize(900,700);
 //		frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
